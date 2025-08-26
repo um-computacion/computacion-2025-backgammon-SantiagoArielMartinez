@@ -1,5 +1,5 @@
 import unittest
-from player import jugador
+from core.player import jugador
 
 class Testjugador(unittest.TestCase):
     
@@ -18,3 +18,4 @@ class Testjugador(unittest.TestCase):
         
 if __name__ == "__main__":
     unittest.main()
+    
