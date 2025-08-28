@@ -1,9 +1,9 @@
 import unittest
-from core.board import tablero
+from core.board import Tablero
 
 class TestTablero(unittest.TestCase):
     def setUp(self):
-        self.tab = tablero()
+        self.tab = Tablero()
     def test_cantidad_casilleros(self):
         self.assertEqual(len(self.tab.__contenedor__), 24)
 
@@ -19,6 +19,17 @@ class TestTablero(unittest.TestCase):
         self.assertListEqual(self.tab.__contenedor__[7], ["negro", "negro", "negro"])
         self.assertListEqual(self.tab.__contenedor__[12], ["negro", "negro"])
         self.assertListEqual(self.tab.__contenedor__[23], ["negro", "negro", "negro", "negro", "negro"])
+
+    def test_mostrar_tablero(self):
+        self.assertEqual(self.tab.mostrar_contenedor(), self.tab.__contenedor__)
+
+    def test_sacar_checker(self):
+        self.assertEqual(self.tab.sacar_checker(0), "blanco")
+        self.assertEqual(self.tab.sacar_checker(5), "negro")
+        self.assertEqual(self.tab.sacar_checker(11), "blanco")
+        self.assertEqual(self.tab.sacar_checker(17), "blanco")
+        self.assertEqual(self.tab.sacar_checker(19), "blanco")
+        self.assertEqual(self.tab.sacar_checker(23), "negro")
 
 if __name__ == "__main__":
     unittest.main()

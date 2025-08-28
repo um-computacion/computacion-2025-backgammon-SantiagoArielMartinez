@@ -1,16 +1,16 @@
 import unittest
-from core.player import jugador
+from core.player import Jugador
 
 class Testjugador(unittest.TestCase):
     
     def test_creacion_jugador(self):
         
-        jugador1 = jugador("Jugador1", "Blanco")
+        jugador1 = Jugador("Jugador1", "Blanco")
         self.assertEqual(jugador1.jugador, "Jugador1")
         self.assertEqual(jugador1.color, "Blanco")
 
     def test_setters(self):
-        s = jugador("jugador1", "Blanco")
+        s = Jugador("jugador1", "Blanco")
         s.jugador = "Santiago"
         s.color = "Blanco"
         self.assertEqual(s.jugador, "Santiago")
