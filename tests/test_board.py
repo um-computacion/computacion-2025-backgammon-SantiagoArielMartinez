@@ -37,6 +37,12 @@ class TestTablero(unittest.TestCase):
         self.assertEqual(self.tab.mover_checker(11,12), "blanco")
         self.assertEqual(self.tab.mover_checker(17,19), "blanco")
         self.assertEqual(self.tab.mover_checker(19,23), "blanco")
+    
+    def test_almacenar_fichas(self):
+        self.assertEqual(self.tab.almacenamiento(1,0), "blanco: 1, negro: 0" )
+        self.assertEqual(self.tab.almacenamiento(0,0), "blanco: 0, negro: 0" )
+        self.assertEqual(self.tab.almacenamiento(0,2), "blanco: 0, negro: 2" )
+        self.assertEqual(self.tab.almacenamiento(4,4), "blanco: 4, negro: 4" )
 
 if __name__ == "__main__":
     unittest.main()
