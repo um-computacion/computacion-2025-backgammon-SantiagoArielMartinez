@@ -9,6 +9,6 @@ class TestBackgammonGame(unittest.TestCase):
         jugador = self.game.crear_jugador("chola", "Blanco")
         self.assertEqual(jugador.__nombre__, "chola")
         self.assertEqual(jugador.__color__, "Blanco")
-
+    
 if __name__ == "__main__":
     unittest.main()
