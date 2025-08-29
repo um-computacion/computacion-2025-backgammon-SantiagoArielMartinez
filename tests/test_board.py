@@ -31,5 +31,12 @@ class TestTablero(unittest.TestCase):
         self.assertEqual(self.tab.sacar_checker(19), "blanco")
         self.assertEqual(self.tab.sacar_checker(23), "negro")
 
+    def test_mover_checker(self):
+        self.assertEqual(self.tab.mover_checker(0,3), "blanco")
+        self.assertEqual(self.tab.mover_checker(5,7), "negro")
+        self.assertEqual(self.tab.mover_checker(11,12), "blanco")
+        self.assertEqual(self.tab.mover_checker(17,19), "blanco")
+        self.assertEqual(self.tab.mover_checker(19,23), "blanco")
+
 if __name__ == "__main__":
     unittest.main()

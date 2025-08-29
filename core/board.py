@@ -20,3 +20,16 @@ class Tablero:
         if self.__contenedor__[posicion]:
             return self.__contenedor__[posicion].pop()
         return None
+    
+    def mover_checker(self,posicion_inicial, posicion_final):
+        if not 0 <= posicion_inicial < 24 and 0 <= posicion_final < 24:
+            return None
+        
+        if 0 <= posicion_inicial < 24 and 0 <= posicion_final < 24:
+            if self.__contenedor__[posicion_inicial]:
+                checker = self.__contenedor__[posicion_inicial].pop()
+                self.__contenedor__[posicion_final].append(checker)
+            return checker
+        
+    
+    
