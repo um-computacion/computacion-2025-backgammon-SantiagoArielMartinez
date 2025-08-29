@@ -15,21 +15,21 @@ class Tablero:
 
     def mostrar_contenedor(self):
         return self.__contenedor__
-
+    
+    def almacenamiento(self,ficha_blanca,ficha_negra):
+        self.__almacen_ficha__ = {"blanco": ficha_blanca, "negras": ficha_negra}
+        return f"blanco: {ficha_blanca}, negro: {ficha_negra}"
+    
     def sacar_checker(self, posicion):
         if self.__contenedor__[posicion]:
             return self.__contenedor__[posicion].pop()
         return None
     
     def mover_checker(self,posicion_inicial, posicion_final):
-        if not 0 <= posicion_inicial < 24 and 0 <= posicion_final < 24:
-            return None
-        
-        if 0 <= posicion_inicial < 24 and 0 <= posicion_final < 24:
+        if 0 <= posicion_inicial < 24 and 0 < posicion_final < 24:
             if self.__contenedor__[posicion_inicial]:
                 checker = self.__contenedor__[posicion_inicial].pop()
                 self.__contenedor__[posicion_final].append(checker)
             return checker
-        
-    
+
     
