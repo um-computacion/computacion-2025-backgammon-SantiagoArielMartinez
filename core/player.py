@@ -21,4 +21,7 @@ class Jugador:
     def color(self, color: str) -> None:
         self.__color__ = color
 
-    
+    ### Ver como impletento la barra en el jugador , ya que la barra es personal de cada jugador y no del tablero
+    ###  def almacenamiento(self,ficha_blanca,ficha_negra):
+    ##    self.__almacen_ficha__ = {"blanco": ficha_blanca, "negras": ficha_negra}
+        ##  return f"blanco: {ficha_blanca}, negro: {ficha_negra}"
