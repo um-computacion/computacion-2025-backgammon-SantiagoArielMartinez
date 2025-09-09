@@ -48,6 +48,31 @@ class TestTablero(unittest.TestCase):
         self.assertEqual(self.tab.movimiento_valido(0,2, jugador_blanco), True)
         self.assertEqual(self.tab.movimiento_valido(0,5, jugador_negro), True)
 
+    def test_movimiento_posicion_fuera_rango(self):
+        jugador = Jugador("Sanchi", "blanco")
+
+        resultado = self.tab.movimiento_valido(-1, 5 , jugador)
+        self.assertFalse(resultado)
+
+        resultado = self.tab.movimiento_valido(0,26, jugador)
+        self.assertFalse(resultado)
+
+        resultado = self.tab.movimiento_valido(55, 5 , jugador)
+        self.assertFalse(resultado)
+
+    def test_sacar_checker_posicion_vacia(self):
+        resultado = self.tab.sacar_checker(1)
+        self.assertIsNone(resultado)
+
+        resultado = self.tab.sacar_checker(3)
+        self.assertIsNone(resultado)
+    
+    def test_mover_checker_especial(self):
+        resultado = self.tab.mover_checker(-1,5)
+        self.assertIsNone(resultado)
+
+        resultado = self.tab.mover_checker(1,2)
+        self.assertIsNone(resultado)
 
 if __name__ == "__main__":
     unittest.main()
