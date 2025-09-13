@@ -44,20 +44,20 @@ class TestTablero(unittest.TestCase):
     def test_validar_movimiento(self):
         jugador_blanco = Jugador("Santi","blanco")
         jugador_negro = Jugador("Gonzalo","negro")
-        self.assertEqual(self.tab.movimiento_valido(0,1, jugador_blanco),True)
+        self.assertEqual(self.tab.movimiento_valido(0,5, jugador_negro), True)
         self.assertFalse(self.tab.movimiento_valido(1,5 , jugador_blanco))
         self.assertTrue(self.tab.movimiento_valido(0,1,jugador_blanco))
         self.tab.__contenedor__[5] = ["negro"]
         self.tab.__contenedor__[1] = []
+        resultado = self.tab.mover_checker(5,1, "negro")
         self.assertTrue(self.tab.movimiento_valido(0, 1, jugador_blanco))
-
     def test_movimiento_posicion_fuera_rango(self):
-        jugador = Jugador("Sanchi", "blanco")
-        resultado = self.tab.movimiento_valido(-1, 5 , jugador)
+        jugador_blanco = Jugador("Sanchi","blanco")
+        resultado = self.tab.movimiento_valido(-1, 5 , "blanco")
         self.assertFalse(resultado)
-        resultado = self.tab.movimiento_valido(0,26, jugador)
+        resultado = self.tab.movimiento_valido(0,26, "blanco")
         self.assertFalse(resultado)
-        resultado = self.tab.movimiento_valido(55, 5 , jugador)
+        resultado = self.tab.movimiento_valido(55, 5 , "blanco")
         self.assertFalse(resultado)
 
     def test_sacar_checker_posicion_vacia(self):
@@ -71,10 +71,9 @@ class TestTablero(unittest.TestCase):
         self.assertIsNone(resultado)
         resultado = self.tab.mover_checker(1,2,"negro")
         self.assertIsNone(resultado)
-
+    
     def test_almacenar_ficha(self):
         resultado = self.tab.almacenamiento("blanco")
         self.assertEqual(resultado, {"blanco": 1, "negras": 0})
-
 if __name__ == "__main__":
     unittest.main()

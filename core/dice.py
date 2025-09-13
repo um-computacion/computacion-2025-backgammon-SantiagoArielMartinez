@@ -13,13 +13,10 @@ class Dados:
     def tirar_dado(self):
         try:
             self.__dado1__ = random.randint(1, 6)
-            self.__dado2__ = random.randint(1, 6)
-            
+            self.__dado2__ = random.randint(1, 6) 
             if self.__dado1__ == self.__dado2__:
                 return (self.__dado1__, self.__dado2__,self.__dado1__,self.__dado2__)
-            
             else: 
                 return (self.__dado1__,self.__dado2__)
-            
         except Exception as e:
             return  ()
