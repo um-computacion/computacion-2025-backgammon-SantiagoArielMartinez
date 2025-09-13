@@ -42,10 +42,13 @@ class Tablero:
         except (ValueError, AttributeError) as e:
             print(f"Error en la validacion de movimiento: {e}")
             return False
+        return False
 
 
-    def mover_checker(self,posicion_inicial, posicion_final):
+    def mover_checker(self,posicion_inicial, posicion_final, color):
         try:
+            if self.__contenedor__[posicion_inicial][-1] != color:
+                return None
             if 0 <= posicion_inicial < 24 and 0 <= posicion_final < 24:
                 if self.__contenedor__[posicion_inicial]:
                     checker = self.__contenedor__[posicion_inicial].pop()
@@ -60,3 +63,8 @@ class Tablero:
         if self.__contenedor__[posicion]:
             return self.__contenedor__[posicion].pop()
         return None
+    
+    def almacenamiento(self,color):
+        self.__almacen_ficha__ = {"blanco": 0, "negras": 0}
+        self.__almacen_ficha__[color] += 1
+        return self.__almacen_ficha__
