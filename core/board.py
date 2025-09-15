@@ -1,3 +1,4 @@
+from turtle import color
 from core.player import Jugador
 
 class Tablero:
@@ -7,7 +8,7 @@ class Tablero:
             [],[],[],[],[],[],  [],[],[],[],[],[],
             [],[],[],[],[],[],  [],[],[],[],[],[], 
                               ]
-
+        self.__almacen_ficha__ = {"blanco": 0, "negro": 0}
     def tablero_inicial(self):
         #El tablero de 24 posiciones con las fichas en su lugar de origen
         self.__contenedor__[0] = ["blanco"] * 2
@@ -27,6 +28,8 @@ class Tablero:
     def movimiento_valido(self, posicion_inicial, posicion_final, jugador : Jugador):
         #verifica si el movimiento que realizo el jugador es correcto, a partir de las reglas del backgammon
         try:
+            if not (posicion_inicial == -1 or 0 <= posicion_inicial < len(self.__contenedor__)):
+                raise ValueError(f"Posicion inicial {posicion_inicial} fuera de rango (0-23 o -1 para barra)")
             #Verifica que las posiciones esten en un rango valido
             if not (0 <= posicion_inicial < len(self.__contenedor__)):
                 raise ValueError(f"Posicion inicial {posicion_inicial} fuera de rango (0-23)")
@@ -36,6 +39,8 @@ class Tablero:
             fin = self.__contenedor__[posicion_final]
             inicio = self.__contenedor__[posicion_inicial]
             color_jugador = jugador.color
+            if posicion_inicial != -1:
+                inicio = self.__contenedor__[posicion_inicial]
             #Verifica que hay fichas en la posicion inicial
             if not inicio:
                 raise ValueError(f"No hay piezas en la posicion inicial {posicion_inicial}")
@@ -80,7 +85,6 @@ class Tablero:
 
     def almacenamiento(self,color):
         #Almacena una ficha capturada en el almacen
-        self.__almacen_ficha__ = {"blanco": 0, "negras": 0}
         self.__almacen_ficha__[color] += 1
         return self.__almacen_ficha__
     
@@ -93,10 +97,26 @@ class Tablero:
                 posicion_final = posicion_inicial + valor
             else:
                 posicion_final = posicion_inicial - valor
-                
+
             if self.movimiento_valido(posicion_inicial,posicion_final,jugador):
                 ficha = self.sacar_checker(posicion_inicial)
                 if ficha:
                     self.__contenedor__[posicion_final].append(ficha)
                     movimientos_realizados.append((posicion_inicial, posicion_final, valor))
+        return movimientos_realizados
+    
+    def reingresar_desde_almacenamiento(self, jugador: Jugador, tiro: tuple):
+        movimientos_realizados = []
+        for valor in tiro:
+            if self.__almacen_ficha__[jugador.color] == 0:
+                continue
+            if jugador.color == "blanco":
+                posicion_final = valor - 1
+            else:
+                posicion_final = 24 - valor
+
+            if self.movimiento_valido(-1, posicion_final, jugador):
+                self.__contenedor__[posicion_final].append(jugador.color)
+                self.__almacen_ficha__[jugador.color] -= 1
+                movimientos_realizados.append((-1, posicion_final, valor))
         return movimientos_realizados
