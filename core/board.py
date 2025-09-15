@@ -23,7 +23,7 @@ class Tablero:
     def estado_tablero(self):
         #obtenes el estado del tablero actual
         return self.__contenedor__
-
+       
     def movimiento_valido(self, posicion_inicial, posicion_final, jugador : Jugador):
         #verifica si el movimiento que realizo el jugador es correcto, a partir de las reglas del backgammon
         try:
@@ -84,3 +84,19 @@ class Tablero:
         self.__almacen_ficha__[color] += 1
         return self.__almacen_ficha__
     
+    def mover_con_dado(self,posicion_inicial, jugador :Jugador, tiro : tuple):
+        movimientos_realizados = []
+        for valor in tiro:
+            if len(self.__contenedor__[posicion_inicial]) == 0:
+                break
+            if jugador.color == "blanco":
+                posicion_final = posicion_inicial + valor
+            else:
+                posicion_final = posicion_inicial - valor
+                
+            if self.movimiento_valido(posicion_inicial,posicion_final,jugador):
+                ficha = self.sacar_checker(posicion_inicial)
+                if ficha:
+                    self.__contenedor__[posicion_final].append(ficha)
+                    movimientos_realizados.append((posicion_inicial, posicion_final, valor))
+        return movimientos_realizados

@@ -75,5 +75,15 @@ class TestTablero(unittest.TestCase):
     def test_almacenar_ficha(self):
         resultado = self.tab.almacenamiento("blanco")
         self.assertEqual(resultado, {"blanco": 1, "negras": 0})
+
+    def test_movimiento_ficha(self):
+        jugador = Jugador("santi","blanco")
+        self.assertEqual(len(self.tab.estado_tablero()[0]),2)
+        resultado = self.tab.mover_con_dado(0,jugador,(3,4))
+        self.assertIn((0,3,3),resultado)
+        self.assertIn((0,4,4),resultado)
+        self.assertEqual(len(self.tab.estado_tablero()[0]),0)
+        self.assertIn("blanco", self.tab.estado_tablero()[3])
+        self.assertIn("blanco", self.tab.estado_tablero()[4])
 if __name__ == "__main__":
     unittest.main()
