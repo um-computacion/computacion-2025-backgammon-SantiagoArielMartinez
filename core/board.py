@@ -1,4 +1,3 @@
-from turtle import color
 from core.player import Jugador
 
 class Tablero:
@@ -26,37 +25,24 @@ class Tablero:
         return self.__contenedor__
        
     def movimiento_valido(self, posicion_inicial, posicion_final, jugador : Jugador):
-        #verifica si el movimiento que realizo el jugador es correcto, a partir de las reglas del backgammon
-        try:
-            if not (posicion_inicial == -1 or 0 <= posicion_inicial < len(self.__contenedor__)):
-                raise ValueError(f"Posicion inicial {posicion_inicial} fuera de rango (0-23 o -1 para barra)")
-            #Verifica que las posiciones esten en un rango valido
-            if not (0 <= posicion_inicial < len(self.__contenedor__)):
-                raise ValueError(f"Posicion inicial {posicion_inicial} fuera de rango (0-23)")
-            if not (0 <= posicion_final < len(self.__contenedor__)):
-                raise ValueError(f"Posicion final {posicion_final} fuera de rango (0-23)")
-            #Obtener las fichas en las posiciones 
-            fin = self.__contenedor__[posicion_final]
-            inicio = self.__contenedor__[posicion_inicial]
-            color_jugador = jugador.color
-            if posicion_inicial != -1:
-                inicio = self.__contenedor__[posicion_inicial]
-            #Verifica que hay fichas en la posicion inicial
-            if not inicio:
-                raise ValueError(f"No hay piezas en la posicion inicial {posicion_inicial}")
-            #Movimiento valido a posicion vacia
-            if not fin:
+        if posicion_inicial == -1:
+            if 0<= posicion_final < len(self.__contenedor__):
                 return True
-            #Movimiento valido a posicion con fichas del mismo color
-            if fin[0] == color_jugador:
-                return True
-            #Movimiento valido para capturar un blot (una ficha enemiga)
-            if len(fin) == 1 and fin[0] != color_jugador:
-                return True
-        except (ValueError, AttributeError) as e:
-            print(f"Error en la validacion de movimiento: {e}")
+            return False 
+        if not (0 <= posicion_inicial < len(self.__contenedor__)):
             return False
-        #Movimiento no valido (posicion bloqueada)
+        if not (0 <= posicion_final < len(self.__contenedor__)):
+            return False 
+        inicio = self.__contenedor__[posicion_inicial]
+        fin = self.__contenedor__[posicion_final]
+        if not inicio:
+            return False
+        if not fin:
+            return True
+        if fin[0] == jugador.color:
+            return True
+        if len(fin) == 1 and fin[0] != jugador.color:
+            return True
         return False
 
     def mover_checker(self,posicion_inicial, posicion_final, color ):
@@ -88,35 +74,18 @@ class Tablero:
         self.__almacen_ficha__[color] += 1
         return self.__almacen_ficha__
     
-    def mover_con_dado(self,posicion_inicial, jugador :Jugador, tiro : tuple):
-        movimientos_realizados = []
-        for valor in tiro:
-            if len(self.__contenedor__[posicion_inicial]) == 0:
-                break
-            if jugador.color == "blanco":
-                posicion_final = posicion_inicial + valor
-            else:
-                posicion_final = posicion_inicial - valor
+    def comer_checker(self, posicion_final, color):
 
-            if self.movimiento_valido(posicion_inicial,posicion_final,jugador):
-                ficha = self.sacar_checker(posicion_inicial)
-                if ficha:
-                    self.__contenedor__[posicion_final].append(ficha)
-                    movimientos_realizados.append((posicion_inicial, posicion_final, valor))
-        return movimientos_realizados
-    
-    def reingresar_desde_almacenamiento(self, jugador: Jugador, tiro: tuple):
-        movimientos_realizados = []
-        for valor in tiro:
-            if self.__almacen_ficha__[jugador.color] == 0:
-                continue
-            if jugador.color == "blanco":
-                posicion_final = valor - 1
-            else:
-                posicion_final = 24 - valor
-
-            if self.movimiento_valido(-1, posicion_final, jugador):
-                self.__contenedor__[posicion_final].append(jugador.color)
-                self.__almacen_ficha__[jugador.color] -= 1
-                movimientos_realizados.append((-1, posicion_final, valor))
-        return movimientos_realizados
+        if not self.__contenedor__[posicion_final]:
+            return False
+        
+        if len(self.__contenedor__[posicion_final]) == 1 and self.__contenedor__[posicion_final][0] != color:
+            enemigo = self.__contenedor__[posicion_final].pop()
+            self.__contenedor__[posicion_final] = [color]
+            self.__almacen_ficha__[enemigo] += 1
+            return True
+        
+        if len(self.__contenedor__[posicion_final]) >= 2:
+            return False
+        
+        return False
