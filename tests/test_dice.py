@@ -21,13 +21,13 @@ class TestDados(unittest.TestCase):
         self.assertEqual(resultado[0],5)
         self.assertEqual(resultado[1],2)
 
-    # @patch("core.dice.random.randint", side_effect = Exception("Error!!")) 
-    # def test_dados_exception(self, randint_patched):
-    #     dado = Dados()
-    #     prueba = dado.tirar_dado()
-    #     self.assertEqual(len(prueba), 0)
-    #     self.assertTrue(randint_patched.called)
-    #     self.assertEqual(randint_patched.call_count, 1)
+    @patch("core.dice.random.randint", side_effect = Exception("Error!!")) 
+    def test_dados_exception(self, randint_patched):
+        dado = Dados()
+        prueba = dado.tirar_dado()
+        self.assertEqual(len(prueba), 0)
+        self.assertTrue(randint_patched.called)
+        self.assertEqual(randint_patched.call_count, 1)
 
 if __name__ == "__main__":
     unittest.main()

@@ -25,22 +25,30 @@ class Tablero:
         return self.__contenedor__
        
     def movimiento_valido(self, posicion_inicial, posicion_final, jugador : Jugador):
+
         if posicion_inicial == -1:
             if 0<= posicion_final < len(self.__contenedor__):
                 return True
             return False 
+        
         if not (0 <= posicion_inicial < len(self.__contenedor__)):
             return False
+        
         if not (0 <= posicion_final < len(self.__contenedor__)):
             return False 
+        
         inicio = self.__contenedor__[posicion_inicial]
         fin = self.__contenedor__[posicion_final]
+
         if not inicio:
             return False
+        
         if not fin:
             return True
+        
         if fin[0] == jugador.color:
             return True
+        
         if len(fin) == 1 and fin[0] != jugador.color:
             return True
         return False
@@ -91,11 +99,15 @@ class Tablero:
         return False
 
     def sacar_checker_comida(self, color, posicion_final):
+
         if self.__almacen_ficha__[color] <= 0:
             return False
+        
         if not (0 <= posicion_final < len(self.__contenedor__)):
             return False
+        
         self.__contenedor__[posicion_final].append(color)
         self.__almacen_ficha__[color] -= 1
+
         return True
         
