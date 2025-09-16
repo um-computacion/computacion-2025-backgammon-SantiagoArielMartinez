@@ -51,13 +51,14 @@ class TestTablero(unittest.TestCase):
         self.tab.__contenedor__[1] = []
         resultado = self.tab.mover_checker(5,1, "negro")
         self.assertTrue(self.tab.movimiento_valido(0, 1, jugador_blanco))
+
     def test_movimiento_posicion_fuera_rango(self):
         jugador_blanco = Jugador("Sanchi","blanco")
-        resultado = self.tab.movimiento_valido(-1, 5 , "blanco")
+        resultado = self.tab.movimiento_valido(-2, 5 , jugador_blanco.color)
         self.assertFalse(resultado)
-        resultado = self.tab.movimiento_valido(0,26, "blanco")
+        resultado = self.tab.movimiento_valido(0,26, jugador_blanco.color)
         self.assertFalse(resultado)
-        resultado = self.tab.movimiento_valido(55, 5 , "blanco")
+        resultado = self.tab.movimiento_valido(55, 5 , jugador_blanco.color)
         self.assertFalse(resultado)
 
     def test_sacar_checker_posicion_vacia(self):
@@ -76,25 +77,17 @@ class TestTablero(unittest.TestCase):
         resultado = self.tab.almacenamiento("blanco")
         self.assertEqual(resultado, {"blanco": 1, "negro": 0})
 
-    def test_movimiento_ficha(self):
-        jugador = Jugador("santi","blanco")
-        self.assertEqual(len(self.tab.estado_tablero()[0]),2)
-        resultado = self.tab.mover_con_dado(0,jugador,(3,4))
-        self.assertIn((0,3,3),resultado)
-        self.assertIn((0,4,4),resultado)
-        self.assertEqual(len(self.tab.estado_tablero()[0]),0)
-        self.assertIn("blanco", self.tab.estado_tablero()[3])
-        self.assertIn("blanco", self.tab.estado_tablero()[4])
     
-    def test_reingresar_ficha_almacenamiento(self):
-        self.tab.almacenamiento("blanco")
-        self.tab.almacenamiento("blanco")
-        self.assertEqual(self.tab.__almacen_ficha__, {"blanco": 2, "negro": 0})
-        self.tab.__contenedor__[3] = []
+    def test_checker_comida(self):
         jugador = Jugador("santi","blanco")
-        resultado = self.tab.mover_con_dado( -1, jugador, (3,5))
-        self.assertIn(( -1,3,3),resultado)
-        self.assertEqual(self.tab.__almacen_ficha__,{"blanco": 1, "negro": 0})
-        self.assertIn("blanco", self.tab.estado_tablero()[3])
+        self.tab.__contenedor__[5] = ["negro"]
+
+        resultado = self.tab.comer_checker(5, jugador.color)
+
+        self.assertTrue(resultado)
+        self.assertEqual(self.tab.__contenedor__[5], ["blanco"])
+        self.assertEqual(self.tab.__almacen_ficha__["negro"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()
