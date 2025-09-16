@@ -89,3 +89,13 @@ class Tablero:
             return False
         
         return False
+
+    def sacar_checker_comida(self, color, posicion_final):
+        if self.__almacen_ficha__[color] <= 0:
+            return False
+        if not (0 <= posicion_final < len(self.__contenedor__)):
+            return False
+        self.__contenedor__[posicion_final].append(color)
+        self.__almacen_ficha__[color] -= 1
+        return True
+        

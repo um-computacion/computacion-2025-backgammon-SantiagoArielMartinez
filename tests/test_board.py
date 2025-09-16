@@ -88,6 +88,15 @@ class TestTablero(unittest.TestCase):
         self.assertEqual(self.tab.__contenedor__[5], ["blanco"])
         self.assertEqual(self.tab.__almacen_ficha__["negro"], 1)
 
+    def test_checker_comida(self):
+        jugador = Jugador("Santi","blanco")
+        jugador2 = Jugador("Axel","negro")
+        self.tab.almacenamiento("blanco")
+        self.tab.__contenedor__[4] = []
+        resultado = self.tab.sacar_checker_comida(jugador.color, 4)
+        self.assertTrue(resultado)
+        self.assertEqual(self.tab.__contenedor__[4], ["blanco"])
+        self.assertEqual(self.tab.__almacen_ficha__["blanco"], 0)
 
 if __name__ == "__main__":
     unittest.main()
