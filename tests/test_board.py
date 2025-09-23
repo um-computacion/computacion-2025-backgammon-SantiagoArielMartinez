@@ -44,21 +44,22 @@ class TestTablero(unittest.TestCase):
     def test_validar_movimiento(self):
         jugador_blanco = Jugador("Santi","blanco")
         jugador_negro = Jugador("Gonzalo","negro")
-        self.assertEqual(self.tab.movimiento_valido(0,5, jugador_negro), True)
+        self.assertTrue(self.tab.movimiento_valido(0,5, jugador_negro))
         self.assertFalse(self.tab.movimiento_valido(1,5 , jugador_blanco))
         self.assertTrue(self.tab.movimiento_valido(0,1,jugador_blanco))
         self.tab.__contenedor__[5] = ["negro"]
         self.tab.__contenedor__[1] = []
-        resultado = self.tab.mover_checker(5,1, "negro")
         self.assertTrue(self.tab.movimiento_valido(0, 1, jugador_blanco))
+        self.tab.__almacen_ficha__[jugador_blanco.color] += 1
+        self.assertFalse(self.tab.movimiento_valido(0, 1, jugador_blanco))
 
     def test_movimiento_posicion_fuera_rango(self):
         jugador_blanco = Jugador("Sanchi","blanco")
-        resultado = self.tab.movimiento_valido(-2, 5 , jugador_blanco.color)
+        resultado = self.tab.movimiento_valido(-2, 5 , jugador_blanco)
         self.assertFalse(resultado)
-        resultado = self.tab.movimiento_valido(0,26, jugador_blanco.color)
+        resultado = self.tab.movimiento_valido(0,26, jugador_blanco)
         self.assertFalse(resultado)
-        resultado = self.tab.movimiento_valido(55, 5 , jugador_blanco.color)
+        resultado = self.tab.movimiento_valido(55, 5 , jugador_blanco)
         self.assertFalse(resultado)
 
     def test_sacar_checker_posicion_vacia(self):
@@ -73,11 +74,6 @@ class TestTablero(unittest.TestCase):
         resultado = self.tab.mover_checker(1,2,"negro")
         self.assertIsNone(resultado)
     
-    def test_almacenar_ficha(self):
-        resultado = self.tab.almacenamiento("blanco")
-        self.assertEqual(resultado, {"blanco": 1, "negro": 0})
-
-    
     def test_checker_comida(self):
         jugador = Jugador("santi","blanco")
         self.tab.__contenedor__[5] = ["negro"]
@@ -88,15 +84,31 @@ class TestTablero(unittest.TestCase):
         self.assertEqual(self.tab.__contenedor__[5], ["blanco"])
         self.assertEqual(self.tab.__almacen_ficha__["negro"], 1)
 
-    def test_checker_comida(self):
-        jugador = Jugador("Santi","blanco")
-        jugador2 = Jugador("Axel","negro")
-        self.tab.almacenamiento("blanco")
-        self.tab.__contenedor__[4] = []
-        resultado = self.tab.sacar_checker_comida(jugador.color, 4)
+        self.tab.__contenedor__[7] = ["negro","negro"]
+        self.assertFalse(self.tab.comer_checker(7, jugador.color))
+
+    def test_sacar_checker_comida(self):
+        self.tab.__almacen_ficha__["blanco"] = 1
+        resultado = self.tab.sacar_checker_comida("blanco", 4)
         self.assertTrue(resultado)
         self.assertEqual(self.tab.__contenedor__[4], ["blanco"])
         self.assertEqual(self.tab.__almacen_ficha__["blanco"], 0)
+        resultado = self.tab.sacar_checker_comida("blanco", 4)
+        self.assertFalse(resultado)
+
+    def test_estado_almacenamiento(self):
+        estado = self.tab.estado_almacenamiento()
+        self.assertEqual(estado, {"blanco": 0, "negro": 0})
+
+    def test_verificar_ganador(self):
+        self.tab.__almacen_ficha__["blanco"] = 1
+        self.assertFalse(self.tab.verificar_ganador("blanco"))
+        self.tab.__almacen_ficha__["blanco"] = 0
+        self.tab.__contenedor__ = [[] for _ in range(24)]
+        self.assertTrue(self.tab.verificar_ganador("blanco"))
+        self.tab.__contenedor__[0] = ["blanco"]
+        self.assertFalse(self.tab.verificar_ganador("blanco"))
+
 
 if __name__ == "__main__":
     unittest.main()
