@@ -111,5 +111,12 @@ class Tablero:
                     return False
         return True
     
-    
+    def bear_off(self, posicion, color):
+        if not self.bear_off_permitido(color):
+            return False
+        elif self.__contenedor__[posicion]:
+            if self.__contenedor__[posicion][-1] == color:
+                self.__contenedor__[posicion].pop()
+                self.__almacen_ficha__[color] += 1
+                return True
         
