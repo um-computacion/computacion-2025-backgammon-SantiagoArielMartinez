@@ -14,3 +14,9 @@ class TestBackgammonGame(unittest.TestCase):
         dados = juego.get_dados()
         self.assertIn(dados.tirar_dado()[0], [1,2,3,4,5,6])
         self.assertIn(dados.tirar_dado()[1], [1,2,3,4,5,6])
+
+    def test_obtener_turno(self):
+        juego = BackgammonGame("Santiago","Vanina")
+        self.assertEqual(juego.obtener_turno(), "Es el turno de Santiago")
+        juego.__turno__ = juego.__jugador2__
+        self.assertEqual(juego.obtener_turno(), "Es el turno de Vanina")

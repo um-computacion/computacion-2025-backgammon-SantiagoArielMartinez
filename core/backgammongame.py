@@ -8,7 +8,7 @@ class BackgammonGame:
         self.__jugador2__ = Jugador(jugador2, "blancas")
         self.__tablero__ = Tablero()
         self.__dados__ = Dados()
-
+        self.__turno__ = self.__jugador1__
     def get_jugador1(self):
         return self.__jugador1__
     
@@ -21,5 +21,11 @@ class BackgammonGame:
     def get_dados(self):
         self.__dados__.tirar_dado()
         return self.__dados__
+    
+    def obtener_turno(self):
+        if self.__turno__ == self.__jugador1__:
+            return f"Es el turno de {self.__jugador1__.nombre}"
+        else:
+            return f"Es el turno de {self.__jugador2__.nombre}"
     
     
