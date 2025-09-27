@@ -121,5 +121,18 @@ class TestTablero(unittest.TestCase):
         self.tab.__contenedor__[22] = ["blanco"]
         self.tab.__contenedor__[23] = ["blanco"]
         self.assertTrue(self.tab.bear_off_permitido("blanco"))
+    
+    def test_bear_off(self):
+        self.tab.__contenedor__ = [[] for _ in range(24)]
+        self.tab.__contenedor__[18] = ["blanco"]
+        self.tab.__contenedor__[19] = ["blanco"]
+        self.tab.__contenedor__[20] = ["blanco"]
+        self.tab.__contenedor__[21] = ["blanco"]
+        self.tab.__contenedor__[22] = ["blanco"]
+        self.tab.__contenedor__[23] = ["blanco"]
+        resultado = self.tab.bear_off(23, "blanco")
+        self.assertTrue(resultado)
+        self.assertEqual(self.tab.__almacen_ficha__["blanco"], 1)
+        self.assertEqual(self.tab.__contenedor__[23], [])
 if __name__ == '__main__':
     unittest.main()
