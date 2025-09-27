@@ -100,3 +100,16 @@ class Tablero:
             return True
         return False
     
+    def bear_off_permitido(self, color):
+        if color == "blanco":
+            rango = range(18, 24)
+        else:
+            rango = range(0, 6)
+        for i in range(24):
+            if i not in rango and self.__contenedor__[i]:
+                if self.__contenedor__[i][0] == color:
+                    return False
+        return True
+    
+    
+        

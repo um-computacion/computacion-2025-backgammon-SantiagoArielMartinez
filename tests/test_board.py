@@ -109,6 +109,17 @@ class TestTablero(unittest.TestCase):
         self.tab.__contenedor__[0] = ["blanco"]
         self.assertFalse(self.tab.verificar_ganador("blanco"))
 
-
-if __name__ == "__main__":
+    def test_bear_off_permitido(self):
+        self.tab.__contenedor__ = [[] for _ in range(24)]
+        self.tab.__contenedor__[0] = ["blanco"]
+        self.assertFalse(self.tab.bear_off_permitido("blanco"))
+        self.tab.__contenedor__ = [[] for _ in range(24)]
+        self.tab.__contenedor__[18] = ["blanco"]
+        self.tab.__contenedor__[19] = ["blanco"]
+        self.tab.__contenedor__[20] = ["blanco"]
+        self.tab.__contenedor__[21] = ["blanco"]
+        self.tab.__contenedor__[22] = ["blanco"]
+        self.tab.__contenedor__[23] = ["blanco"]
+        self.assertTrue(self.tab.bear_off_permitido("blanco"))
+if __name__ == '__main__':
     unittest.main()
