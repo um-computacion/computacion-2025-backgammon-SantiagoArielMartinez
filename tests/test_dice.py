@@ -24,5 +24,13 @@ class TestDados(unittest.TestCase):
         dado.__valores__ = [3,4]
         self.assertListEqual(dado.valores_dados(), [3,4])
 
+    def test_usar_valor(self):
+        dado = Dados()
+        dado.__valores__ = [2,5]
+        self.assertTrue(dado.usar_valor(2))
+        self.assertListEqual(dado.__valores__, [5])
+        self.assertFalse(dado.usar_valor(6))
+        self.assertListEqual(dado.__valores__, [5])
+
 if __name__ == "__main__":
     unittest.main()
