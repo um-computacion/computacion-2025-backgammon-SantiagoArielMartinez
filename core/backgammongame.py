@@ -9,6 +9,8 @@ class BackgammonGame:
         self.__tablero__ = Tablero()
         self.__dados__ = Dados()
         self.__turno__ = self.__jugador1__
+        self.__tablero__.tablero_inicial()
+        
     def get_jugador1(self):
         return self.__jugador1__
     
@@ -33,5 +35,4 @@ class BackgammonGame:
             self.__turno__ = self.__jugador2__
         else:
             self.__turno__ = self.__jugador1__
-    
     
