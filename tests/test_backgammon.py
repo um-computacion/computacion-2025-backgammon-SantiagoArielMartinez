@@ -20,3 +20,11 @@ class TestBackgammonGame(unittest.TestCase):
         self.assertEqual(juego.obtener_turno(), "Es el turno de Santiago")
         juego.__turno__ = juego.__jugador2__
         self.assertEqual(juego.obtener_turno(), "Es el turno de Vanina")
+
+    def test_cambiar_turno(self):
+        juego = BackgammonGame("Santiago","Vanina")
+        self.assertEqual(juego.obtener_turno(), "Es el turno de Santiago")
+        juego.cambiar_turno()
+        self.assertEqual(juego.obtener_turno(), "Es el turno de Vanina")
+        juego.cambiar_turno()
+        self.assertEqual(juego.obtener_turno(), "Es el turno de Santiago")

@@ -27,5 +27,11 @@ class BackgammonGame:
             return f"Es el turno de {self.__jugador1__.nombre}"
         else:
             return f"Es el turno de {self.__jugador2__.nombre}"
+        
+    def cambiar_turno(self):
+        if self.__turno__ == self.__jugador1__:
+            self.__turno__ = self.__jugador2__
+        else:
+            self.__turno__ = self.__jugador1__
     
     
