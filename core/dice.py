@@ -20,4 +20,10 @@ class Dados:
     
     def valores_dados(self):
         return list(self.__valores__)
+
+    def usar_valor(self, valor):
+        if valor in self.__valores__:
+            self.__valores__.remove(valor)
+            return True
+        return False
     
