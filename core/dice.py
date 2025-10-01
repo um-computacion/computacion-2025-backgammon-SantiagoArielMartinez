@@ -27,3 +27,10 @@ class Dados:
             return True
         return False
     
+    def quedan_valores(self):
+        return len(self.__valores__) > 0
+    
+    def resetear_dados(self):
+        self.__valores__.clear()
+
+        

@@ -32,5 +32,17 @@ class TestDados(unittest.TestCase):
         self.assertFalse(dado.usar_valor(6))
         self.assertListEqual(dado.__valores__, [5])
 
+    def test_quedan_valores(self):
+        dado = Dados()
+        dado.__valores__ = [1]
+        self.assertTrue(dado.quedan_valores())
+        dado.__valores__.clear()
+        self.assertFalse(dado.quedan_valores())
+
+    def test_resetear_dados(self):
+        dado = Dados()
+        dado.__valores__ = [1,2,3]
+        dado.resetear_dados()
+        self.assertListEqual(dado.__valores__, [])
 if __name__ == "__main__":
     unittest.main()
