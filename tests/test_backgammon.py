@@ -45,3 +45,11 @@ class TestBackgammonGame(unittest.TestCase):
        self.assertTrue(juego.mover_ficha(juego.get_jugador1(), 10, 13, 3))
        self.assertFalse(juego.mover_ficha(juego.get_jugador1(), 13, 18, 5))
        self.assertFalse(juego.mover_ficha(juego.get_jugador1(), 13, 16, 3))
+    
+    def test_puede_mover(self):
+        juego = BackgammonGame("Santiago","Vanina")
+        self.assertTrue(juego.puede_mover(juego.get_jugador1()))
+        juego.cambiar_turno()
+        self.assertFalse(juego.puede_mover(juego.get_jugador1()))
+        self.assertTrue(juego.puede_mover(juego.get_jugador2()))
+      
