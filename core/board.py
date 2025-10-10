@@ -8,7 +8,7 @@ class Tablero:
             [],[],[],[],[],[],  [],[],[],[],[],[], 
                               ]
         self.__almacen_ficha__ = {"blanco": 0, "negro": 0}
-
+        self.__banco__ = {"blanco": 0, "negro": 0}
     def tablero_inicial(self):
         #El tablero de 24 posiciones con las fichas en su lugar de origen
         self.__contenedor__[0] = ["blanco"] * 2
@@ -117,6 +117,6 @@ class Tablero:
         elif self.__contenedor__[posicion]:
             if self.__contenedor__[posicion][-1] == color:
                 self.__contenedor__[posicion].pop()
-                self.__almacen_ficha__[color] += 1
+                self.__banco__[color] += 1
                 return True
         

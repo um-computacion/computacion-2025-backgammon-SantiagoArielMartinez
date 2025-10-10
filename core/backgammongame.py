@@ -81,3 +81,21 @@ class BackgammonGame:
     
     def hay_fichas_en_almacen(self, jugador : Jugador):
        return self.__tablero__.__almacen_ficha__[jugador.color] > 0
+
+    def reingresar_ficha(self, jugador : Jugador, valor_dado):
+       if not self.puede_mover(jugador):
+           return False
+       if not self.hay_fichas_en_almacen(jugador):
+           return False
+       if valor_dado not in self.__dados__.valores_dados():
+           return False
+       if jugador.color == "blanco":
+           posicion_final = valor_dado - 1
+       else:
+           posicion_final = 24 - valor_dado
+       if self.__tablero__.sacar_checker_comida(jugador.color, posicion_final):
+           self.__dados__.usar_valor(valor_dado)
+           return True
+       return False
+
+    
