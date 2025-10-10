@@ -52,4 +52,20 @@ class TestBackgammonGame(unittest.TestCase):
         juego.cambiar_turno()
         self.assertFalse(juego.puede_mover(juego.get_jugador1()))
         self.assertTrue(juego.puede_mover(juego.get_jugador2()))
+        
+    @patch("core.dice.random.randint", side_effect = [4,2])
+    def test_usar_dados(self, mock_randint):
+        juego = BackgammonGame("Santiago","Vanina")
+        dados = juego.tirar_dados()
+        valor1 = dados.valores_dados()[0]
+        valor2 = dados.valores_dados()[1]
+        self.assertEqual(valor1, 4)
+        self.assertEqual(valor2, 2)
+        self.assertEqual(len(dados.valores_dados()), 2)
+        self.assertTrue(juego.usar_dados(valor1))
+        self.assertEqual(len(dados.valores_dados()), 1)
+        self.assertNotIn(valor1, dados.valores_dados())
+        self.assertTrue(juego.usar_dados(valor2))
+        self.assertEqual(len(dados.valores_dados()), 0)
+        self.assertFalse(juego.usar_dados(5))
       

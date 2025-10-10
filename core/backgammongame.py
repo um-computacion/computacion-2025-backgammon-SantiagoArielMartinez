@@ -57,7 +57,10 @@ class BackgammonGame:
            return True
         return False
 
-    
-
-
+    def usar_dados(self, valor):
+        if valor in self.__dados__.valores_dados():
+            self.__dados__.usar_valor(valor)
+            return True
+        else:
+            return False
         
