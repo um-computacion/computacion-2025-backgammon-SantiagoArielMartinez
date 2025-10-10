@@ -35,24 +35,20 @@ class TestBackgammonGame(unittest.TestCase):
        juego = BackgammonGame("Santiago","Vanina")
        juego.get_tablero().tablero_inicial()
        dados = juego.tirar_dados()
-       self.assertTrue(juego.mover_ficha(juego.get_jugador1(), 0, 5, 5))
-       self.assertTrue(juego.mover_ficha(juego.get_jugador1(), 0, 3, 3))
-       juego.cambiar_turno()
-       self.assertFalse(juego.mover_ficha(juego.get_jugador2(), 11, 8, 3))
-       juego.cambiar_turno()
-       self.assertTrue(juego.mover_ficha(juego.get_jugador1(), 5, 10, 5))
-       self.assertFalse(juego.mover_ficha(juego.get_jugador1(), 10, 15, 5))
-       self.assertTrue(juego.mover_ficha(juego.get_jugador1(), 10, 13, 3))
-       self.assertFalse(juego.mover_ficha(juego.get_jugador1(), 13, 18, 5))
-       self.assertFalse(juego.mover_ficha(juego.get_jugador1(), 13, 16, 3))
+       # Jugador1 (negro) mueve de 23 hacia 0 (restando)
+       self.assertTrue(juego.mover_ficha(juego.get_jugador1(), 23, 18, 5))
+       self.assertTrue(juego.mover_ficha(juego.get_jugador1(), 23, 20, 3))
+       # Sin dados disponibles, no puede mover
+       self.assertFalse(juego.mover_ficha(juego.get_jugador1(), 23, 18, 5))
     
     def test_puede_mover(self):
         juego = BackgammonGame("Santiago","Vanina")
+        juego.tirar_dados()
         self.assertTrue(juego.puede_mover(juego.get_jugador1()))
         juego.cambiar_turno()
         self.assertFalse(juego.puede_mover(juego.get_jugador1()))
         self.assertTrue(juego.puede_mover(juego.get_jugador2()))
-        
+
     @patch("core.dice.random.randint", side_effect = [4,2])
     def test_usar_dados(self, mock_randint):
         juego = BackgammonGame("Santiago","Vanina")
@@ -69,3 +65,20 @@ class TestBackgammonGame(unittest.TestCase):
         self.assertEqual(len(dados.valores_dados()), 0)
         self.assertFalse(juego.usar_dados(5))
       
+    def test_estado_juego(self):
+        juego = BackgammonGame("Santiago","Vanina")
+        estado = juego.estado_juego()
+        self.assertIn("tablero", estado)
+        self.assertIn("turno", estado)
+        self.assertEqual(estado["turno"], "Santiago")
+        self.assertEqual(len(estado["tablero"]), 24)
+    
+    def test_hay_almacen(self):
+        juego = BackgammonGame("Santiago","Vanina")
+        self.assertFalse(juego.hay_fichas_en_almacen(juego.get_jugador1()))
+        self.assertFalse(juego.hay_fichas_en_almacen(juego.get_jugador2()))
+        juego.__tablero__.__almacen_ficha__["negro"] = 1
+        juego.__tablero__.__almacen_ficha__["blanco"] = 2
+        self.assertTrue(juego.hay_fichas_en_almacen(juego.get_jugador1()))
+        self.assertTrue(juego.hay_fichas_en_almacen(juego.get_jugador2()))
+        
