@@ -3,9 +3,9 @@ from core.board import Tablero
 from core.dice import Dados
 from core.checkers import Ficha
 class BackgammonGame:
-    def __init__(self, jugador1,jugador2):
-        self.__jugador1__ = Jugador(jugador1, "negro")
-        self.__jugador2__ = Jugador(jugador2, "blanco")
+    def __init__(self, nombre_jugador1,nombre_jugador2):
+        self.__jugador1__ = Jugador(nombre_jugador1, "negro")
+        self.__jugador2__ = Jugador(nombre_jugador2, "blanco")
         self.__tablero__ = Tablero()
         self.__dados__ = Dados()
         self.__turno__ = self.__jugador1__
@@ -19,6 +19,9 @@ class BackgammonGame:
     
     def get_tablero(self):
         return self.__tablero__
+    
+    def get_turno_actual(self):
+        return self.__turno__
     
     def tirar_dados(self):
         self.__dados__.tirar_dado()
@@ -36,10 +39,15 @@ class BackgammonGame:
         else:
             self.__turno__ = self.__jugador1__
     
-    def mover_ficha(self, jugador : Jugador, posicion_inicial, posicion_final, valor_dado):
-        if jugador.color != self.__turno__.color:
-           return False
+    def puede_mover(self, jugador: Jugador):
         if jugador != self.__turno__:
+            return False
+        if len(self.__dados__.valores_dados()) == 0:
+            return False
+        return True
+    
+    def mover_ficha(self, jugador : Jugador, posicion_inicial, posicion_final, valor_dado):
+        if not self.puede_mover(jugador):
            return False
         if valor_dado not in self.__dados__.valores_dados():
            return False
@@ -48,3 +56,8 @@ class BackgammonGame:
            self.__dados__.usar_valor(valor_dado)
            return True
         return False
+
+    
+
+
+        
