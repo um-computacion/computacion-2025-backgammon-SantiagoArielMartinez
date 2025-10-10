@@ -98,4 +98,6 @@ class BackgammonGame:
            return True
        return False
 
+    def hay_fichas_en_almacen(self, jugador : Jugador):
+       return self.__tablero__.__almacen_ficha__[jugador.color] > 0
     

@@ -94,3 +94,10 @@ class TestBackgammonGame(unittest.TestCase):
         self.assertEqual(juego.__tablero__.__almacen_ficha__["negro"], 0)
         self.assertEqual(juego.__tablero__.__almacen_ficha__["blanco"], 1)
         self.assertNotIn(valor_dado, juego.__dados__.valores_dados())
+
+    def test_hay_fichas_en_almacen(self):
+        juego = BackgammonGame("Santiago","Vanina")
+        self.assertFalse(juego.hay_fichas_en_almacen(juego.get_jugador1()))
+        juego.__tablero__.__almacen_ficha__["negro"] = 1
+        self.assertTrue(juego.hay_fichas_en_almacen(juego.get_jugador1()))
+        self.assertFalse(juego.hay_fichas_en_almacen(juego.get_jugador2()))
