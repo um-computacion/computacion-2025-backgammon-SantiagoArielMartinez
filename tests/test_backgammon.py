@@ -81,4 +81,16 @@ class TestBackgammonGame(unittest.TestCase):
         juego.__tablero__.__almacen_ficha__["blanco"] = 2
         self.assertTrue(juego.hay_fichas_en_almacen(juego.get_jugador1()))
         self.assertTrue(juego.hay_fichas_en_almacen(juego.get_jugador2()))
-        
+    @patch("core.dice.random.randint", side_effect = [3,5]) 
+    def test_reingresar_ficha(self, mock_randint):
+        juego = BackgammonGame("Santiago","Vanina")
+        juego.__tablero__.__almacen_ficha__["negro"] = 1
+        juego.__tablero__.__almacen_ficha__["blanco"] = 1
+        juego.tirar_dados()
+        dados = juego.__dados__.valores_dados()
+        valor_dado = dados[0]
+        self.assertFalse(juego.reingresar_ficha(juego.get_jugador2(), valor_dado))
+        self.assertTrue(juego.reingresar_ficha(juego.get_jugador1(), valor_dado))
+        self.assertEqual(juego.__tablero__.__almacen_ficha__["negro"], 0)
+        self.assertEqual(juego.__tablero__.__almacen_ficha__["blanco"], 1)
+        self.assertNotIn(valor_dado, juego.__dados__.valores_dados())

@@ -99,9 +99,9 @@ class TestTablero(unittest.TestCase):
         self.assertEqual(estado, {"blanco": 0, "negro": 0})
 
     def test_verificar_ganador(self):
-        self.tab.__almacen_ficha__["blanco"] = 1
+        self.tab.__banco__["blanco"] = 1
         self.assertFalse(self.tab.verificar_ganador("blanco"))
-        self.tab.__almacen_ficha__["blanco"] = 0
+        self.tab.__banco__["blanco"] = 0
         self.tab.__contenedor__ = [[] for _ in range(24)]
         self.assertTrue(self.tab.verificar_ganador("blanco"))
         self.tab.__contenedor__[0] = ["blanco"]
@@ -130,7 +130,7 @@ class TestTablero(unittest.TestCase):
         self.tab.__contenedor__[23] = ["blanco"]
         resultado = self.tab.bear_off(23, "blanco")
         self.assertTrue(resultado)
-        self.assertEqual(self.tab.__almacen_ficha__["blanco"], 1)
+        self.assertEqual(self.tab.__banco__["blanco"], 1)
         self.assertEqual(self.tab.__contenedor__[23], [])
 if __name__ == '__main__':
     unittest.main()
