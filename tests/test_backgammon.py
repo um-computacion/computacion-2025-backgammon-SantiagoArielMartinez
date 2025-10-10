@@ -101,3 +101,24 @@ class TestBackgammonGame(unittest.TestCase):
         juego.__tablero__.__almacen_ficha__["negro"] = 1
         self.assertTrue(juego.hay_fichas_en_almacen(juego.get_jugador1()))
         self.assertFalse(juego.hay_fichas_en_almacen(juego.get_jugador2()))
+
+    def test_verificar_ganador(self):
+        juego = BackgammonGame("Santiago","Vanina")
+        # Al inicio no hay ganador
+        self.assertIsNone(juego.verificar_ganador())
+        juego.__tablero__.__almacen_ficha__["negro"] = 1
+        self.assertIsNone(juego.verificar_ganador())
+        # Sin fichas en almacén y tablero vacío, jugador1 gana
+        juego.__tablero__.__almacen_ficha__["negro"] = 0
+        juego.__tablero__.__contenedor__ = [[] for _ in range(24)]
+        self.assertEqual(juego.verificar_ganador(), "Santiago")
+
+    def test_finalizar_turno(self):
+        juego = BackgammonGame("Santiago","Vanina")
+        juego.tirar_dados()
+        self.assertTrue(juego.puede_mover(juego.get_jugador1()))
+        juego.finalizar_turno()
+        self.assertFalse(juego.puede_mover(juego.get_jugador1()))
+        juego.tirar_dados()
+        self.assertTrue(juego.puede_mover(juego.get_jugador2()))
+        

@@ -101,3 +101,13 @@ class BackgammonGame:
     def hay_fichas_en_almacen(self, jugador : Jugador):
        return self.__tablero__.__almacen_ficha__[jugador.color] > 0
     
+    def verificar_ganador(self):
+       if self.__tablero__.verificar_ganador(self.__jugador1__.color):
+           return self.__jugador1__.nombre
+       elif self.__tablero__.verificar_ganador(self.__jugador2__.color):
+           return self.__jugador2__.nombre
+       return None
+  
+    def finalizar_turno(self):
+       self.__dados__.resetear_dados()
+       self.cambiar_turno()
