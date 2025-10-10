@@ -42,7 +42,10 @@ class BackgammonGame:
     def puede_mover(self, jugador: Jugador):
         if jugador != self.__turno__:
             return False
-        if len(self.__dados__.valores_dados()) == 0:
+        try:
+            if len(self.__dados__.valores_dados()) == 0:
+                return False
+        except AttributeError:
             return False
         return True
     
@@ -63,4 +66,18 @@ class BackgammonGame:
             return True
         else:
             return False
-        
+    
+    def estado_juego(self):
+        try:
+            dados_actuales = self.__dados__.valores_dados()
+        except AttributeError:
+            dados_actuales = []
+        return {
+            "tablero" : self.__tablero__.estado_tablero(),
+            "turno" : self.__turno__.nombre,
+            "dados" : dados_actuales,
+            "almacen_fichas" : self.__tablero__.__almacen_ficha__
+        }    
+    
+    def hay_fichas_en_almacen(self, jugador : Jugador):
+       return self.__tablero__.__almacen_ficha__[jugador.color] > 0
