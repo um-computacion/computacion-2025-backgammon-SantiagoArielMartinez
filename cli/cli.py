@@ -31,3 +31,21 @@ class CLI:
        valores = dados.valores_dados()
        print(f"\n Dados: {valores[0]} y {valores[1]}")
        return valores
+
+    def realizar_movimiento(self, jugador):
+       """Permite al jugador mover una ficha"""
+       try:
+           print("\nIngrese el movimiento:")
+           origen = int(input("  Posición origen (0-23): "))
+           destino = int(input("  Posición destino (0-23): "))
+           dado = int(input("  Valor del dado a usar: "))
+          
+           if self.__game__.mover_ficha(jugador, origen, destino, dado):
+               print("Movimiento realizado con éxito")
+               return True
+           else:
+               print("Movimiento inválido")
+               return False
+       except ValueError:
+           print("Error: Ingrese solo números")
+           return False
