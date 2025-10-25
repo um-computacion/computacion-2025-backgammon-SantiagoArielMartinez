@@ -1,7 +1,6 @@
 from core.player import Jugador
 from core.board import Tablero
 from core.dice import Dados
-from core.checkers import Ficha
 class BackgammonGame:
     def __init__(self, nombre_jugador1,nombre_jugador2):
         self.__jugador1__ = Jugador(nombre_jugador1, "negro")
@@ -97,9 +96,6 @@ class BackgammonGame:
            self.__dados__.usar_valor(valor_dado)
            return True
        return False
-
-    def hay_fichas_en_almacen(self, jugador : Jugador):
-       return self.__tablero__.__almacen_ficha__[jugador.color] > 0
     
     def verificar_ganador(self):
        if self.__tablero__.verificar_ganador(self.__jugador1__.color):
