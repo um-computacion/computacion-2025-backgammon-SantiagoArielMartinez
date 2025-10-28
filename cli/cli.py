@@ -49,3 +49,55 @@ class CLI:
        except ValueError:
            print("Error: Ingrese solo números")
            return False
+    
+
+    def menu_turno(self, jugador):
+       """Menú de opciones del turno"""
+       while self.__game__.puede_mover(jugador):
+           print("\n¿Qué desea hacer?")
+           print("1. Mover ficha")
+           print("2. Reingresar ficha (si tiene en el almacén)")
+           print("3. Ver tablero")
+           print("4. Finalizar turno")
+          
+           opcion = input("Opción: ")
+          
+           if opcion == "1":
+               self.realizar_movimiento(jugador)
+           elif opcion == "2":
+               if self.__game__.hay_fichas_en_almacen(jugador):
+                   dado = int(input("Valor del dado: "))
+                   if self.__game__.reingresar_ficha(jugador, dado):
+                       print("Ficha reingresada")
+                   else:
+                       print("No se pudo reingresar")
+               else:
+                   print("No tienes fichas en el almacén")
+           elif opcion == "3":
+               self.mostrar_tablero()
+           elif opcion == "4":
+               break
+           else:
+               print("Opción inválida")
+  
+    def main(self):
+       """Bucle principal del juego"""
+       print("\n¡Comienza el juego!")
+       self.mostrar_tablero()
+      
+       while not self.__game__.verificar_ganador():
+           self.mostrar_turno()
+           jugador_actual = self.__game__.get_turno_actual()
+          
+           self.tirar_dados()
+           self.menu_turno(jugador_actual)
+          
+           self.__game__.finalizar_turno()
+      
+       ganador = self.__game__.verificar_ganador()
+       print(f"\n¡FELICIDADES {ganador}! HAS GANADO")
+
+
+if __name__ == "__main__":
+   juego = CLI()
+   juego.main()
