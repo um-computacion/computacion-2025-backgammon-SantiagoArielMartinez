@@ -9,17 +9,33 @@ class CLI:
         
     def mostrar_tablero(self):
         """Muestra el tablero de forma simple"""
-        print("\n" + "="*50)
+        print("\n" + "="*80)
         tablero = self.__game__.get_tablero().estado_tablero()
         almacen = self.__game__.get_tablero().estado_almacenamiento()
-        
         print(f"Fichas capturadas - Negras: {almacen['negro']}, Blancas: {almacen['blanco']}")
-        print("-"*50)
+        print("-"*80)
+        print("\nParte Superior (Puntos 12-23):")
+        for i in range(23, 11, -1):
+            fichas = tablero[i] if tablero[i] else []
+            if fichas:
+                color = fichas[0]
+                cantidad = len(fichas)
+                print(f"Punto {i}: {color} x{cantidad}")
+            else:
+                print(f"Punto {i:}: (vacío)")
+                
+        print("Parte Inferior (Puntos 0-11):")
+      
+        for i in range(12):
+            fichas = tablero[i] if tablero[i] else []
+            if fichas:
+                color = fichas[0]
+                cantidad = len(fichas)
+                print(f"Punto {i}: {color} x{cantidad}")
+            else:
+                print(f"Punto {i}: (vacío)")
         
-        for i, posicion in enumerate(tablero):
-            if posicion:
-                print(f"Posición {i}: {posicion}")
-        print("="*50 + "\n")
+        print("="*80 + "\n")
     
     def mostrar_turno(self):
        """Muestra de quién es el turno"""

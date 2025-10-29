@@ -159,6 +159,10 @@ class Tablero:
             return False
         if not (0 <= posicion_final < len(self.__contenedor__)):
             return False
+        # Verificar si hay 2 o más fichas enemigas en la posición
+        if len(self.__contenedor__[posicion_final]) >= 2:
+            if self.__contenedor__[posicion_final][0] != color:
+                return False
         self.__contenedor__[posicion_final].append(color)
         self.__almacen_ficha__[color] -= 1
         return True
@@ -176,7 +180,9 @@ class Tablero:
         elif self.__almacen_ficha__[color] > 0:
             return False
         elif self.__contenedor__ == [[] for _ in range(24)]:
-            return True
+            if self.__banco__[color] == 15:
+                return True
+        
         return False
     
     def bear_off_permitido(self, color):

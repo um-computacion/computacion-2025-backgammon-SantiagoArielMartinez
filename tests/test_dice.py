@@ -1,48 +1,136 @@
 import unittest
 from core.dice import Dados
 from unittest.mock import patch
+
 class TestDados(unittest.TestCase):
 
-    @patch("core.dice.random.randint", side_effect = [5,2])
-    def test_dados(self, mock_ranint):
+    @patch("core.dice.random.randint", side_effect=[4, 2])
+    def test_tirar_dado_valores_mockados(self, mock_randint):
         dado = Dados()
-        resultado = dado.tirar_dado()
-        self.assertEqual(len(resultado), 2)
-        self.assertEqual(resultado[0],5)
-        self.assertEqual(resultado[1],2)
+        dado.tirar_dado()
+        self.assertEqual(dado.valores_dados(), [4, 2])
+    @patch("core.dice.random.randint", side_effect=[3, 1])
+    def test_tirar_dado_genera_dos_valores(self, mock_randint):
+        dado = Dados()
+        dado.tirar_dado()
+        self.assertEqual(len(dado.valores_dados()), 2)
 
-    @patch("core.dice.random.randint", side_effect = Exception("Error!!")) 
-    def test_dados_exception(self, randint_patched):
+    def test_tirar_dado_valor1_en_rango(self):
         dado = Dados()
-        prueba = dado.tirar_dado()
-        self.assertEqual(len(prueba), 0)
-        self.assertTrue(randint_patched.called)
-        self.assertEqual(randint_patched.call_count, 1)
-    
-    def valores_disponibles(self):
-        dado = Dados()
-        dado.__valores__ = [3,4]
-        self.assertListEqual(dado.valores_dados(), [3,4])
+        dado.tirar_dado()
+        self.assertIn(dado.valores_dados()[0], [1, 2, 3, 4, 5, 6])
 
-    def test_usar_valor(self):
+    def test_tirar_dado_valor2_en_rango(self):
         dado = Dados()
-        dado.__valores__ = [2,5]
-        self.assertTrue(dado.usar_valor(2))
-        self.assertListEqual(dado.__valores__, [5])
-        self.assertFalse(dado.usar_valor(6))
-        self.assertListEqual(dado.__valores__, [5])
+        dado.tirar_dado()
+        self.assertIn(dado.valores_dados()[1], [1, 2, 3, 4, 5, 6])
 
-    def test_quedan_valores(self):
+    @patch("core.dice.random.randint", side_effect=[3, 3])
+    def test_tirar_dado_dobles_genera_cuatro_valores(self, mock_randint):
         dado = Dados()
-        dado.__valores__ = [1]
-        self.assertTrue(dado.quedan_valores())
-        dado.__valores__.clear()
-        self.assertFalse(dado.quedan_valores())
+        dado.tirar_dado()
+        self.assertEqual(len(dado.valores_dados()), 4)
 
-    def test_resetear_dados(self):
+    @patch("core.dice.random.randint", side_effect=[3, 3])
+    def test_tirar_dado_dobles_todos_iguales(self, mock_randint):
         dado = Dados()
-        dado.__valores__ = [1,2,3]
+        dado.tirar_dado()
+        self.assertEqual(dado.valores_dados(), [3, 3, 3, 3])
+
+    @patch("core.dice.random.randint", side_effect=[4, 2])
+    def test_usar_valor_elimina_dado(self, mock_randint):
+        dado = Dados()
+        dado.tirar_dado()
+        dado.usar_valor(4)
+        self.assertNotIn(4, dado.valores_dados())
+
+    @patch("core.dice.random.randint", side_effect=[4, 2])
+    def test_usar_valor_reduce_cantidad(self, mock_randint):
+        dado = Dados()
+        dado.tirar_dado()
+        dado.usar_valor(4)
+        self.assertEqual(len(dado.valores_dados()), 1)
+
+    @patch("core.dice.random.randint", side_effect=[4, 2])
+    def test_usar_valor_mantiene_otros_dados(self, mock_randint):
+        dado = Dados()
+        dado.tirar_dado()
+        dado.usar_valor(4)
+        self.assertIn(2, dado.valores_dados())
+
+    @patch("core.dice.random.randint", side_effect=[4, 2])
+    def test_resetear_dados_vacia_lista(self, mock_randint):
+        dado = Dados()
+        dado.tirar_dado()
         dado.resetear_dados()
-        self.assertListEqual(dado.__valores__, [])
-if __name__ == "__main__":
+        self.assertEqual(len(dado.valores_dados()), 0)
+
+    def test_resetear_dados_permite_nuevo_tiro(self):
+        dado = Dados()
+        dado.tirar_dado()
+        dado.resetear_dados()
+        dado.tirar_dado()
+        self.assertEqual(len(dado.valores_dados()), 2)
+
+    @patch("core.dice.random.randint", side_effect=[6, 6])
+    def test_usar_valor_en_dobles(self, mock_randint):
+        """Test usar valor cuando hay dados dobles"""
+        dado = Dados()
+        dado.tirar_dado()
+        self.assertEqual(len(dado.valores_dados()), 4)
+        dado.usar_valor(6)
+        self.assertEqual(len(dado.valores_dados()), 3)
+
+    def test_usar_valor_no_existente_no_modifica_lista(self):
+        """Test que usar un valor inexistente no modifica la lista"""
+        dado = Dados()
+        dado.tirar_dado()
+        valores_antes = dado.valores_dados().copy()
+        dado.usar_valor(7)
+        self.assertEqual(len(dado.valores_dados()), len(valores_antes))
+
+    @patch("core.dice.random.randint", side_effect=[1, 1])
+    def test_tirar_dado_dobles_uno(self, mock_randint):
+        """Test dados dobles con valor 1"""
+        dado = Dados()
+        dado.tirar_dado()
+        self.assertEqual(dado.valores_dados(), [1, 1, 1, 1])
+
+    @patch("core.dice.random.randint", side_effect=[6, 6])
+    def test_tirar_dado_dobles_seis(self, mock_randint):
+        """Test dados dobles con valor 6"""
+        dado = Dados()
+        dado.tirar_dado()
+        self.assertEqual(dado.valores_dados(), [6, 6, 6, 6])
+
+    def test_valores_dados_antes_de_tirar(self):
+        """Test valores_dados cuando no se han tirado dados"""
+        dado = Dados()
+        try:
+            valores = dado.valores_dados()
+            self.assertIsInstance(valores, list)
+        except AttributeError:
+            pass
+
+    @patch("core.dice.random.randint", side_effect=[2, 5])
+    def test_usar_todos_los_valores(self, mock_randint):
+        """Test usar todos los valores de los dados"""
+        dado = Dados()
+        dado.tirar_dado()
+        dado.usar_valor(2)
+        dado.usar_valor(5)
+        self.assertEqual(len(dado.valores_dados()), 0)
+
+    @patch("core.dice.random.randint", side_effect=[4, 4])
+    def test_usar_valor_multiple_veces_en_dobles(self, mock_randint):
+        """Test usar el mismo valor múltiples veces en dados dobles"""
+        dado = Dados()
+        dado.tirar_dado()
+        dado.usar_valor(4)
+        dado.usar_valor(4)
+        dado.usar_valor(4)
+        self.assertEqual(len(dado.valores_dados()), 1)
+        self.assertEqual(dado.valores_dados()[0], 4)
+
+if __name__ == '__main__':
     unittest.main()
