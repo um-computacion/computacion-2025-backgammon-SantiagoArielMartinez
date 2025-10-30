@@ -121,10 +121,13 @@ class BackgammonGame:
             return False
         if valor_dado not in self.__dados__.valores_dados():
             return False
+
+        # El tablero ahora se encarga de todo. Primero valida...
         if self.__tablero__.movimiento_valido(posicion_inicial, posicion_final, jugador):
-            self.__tablero__.mover_checker(posicion_inicial, posicion_final, jugador.color)
-            self.__dados__.usar_valor(valor_dado)
-            return True
+            # ... y luego mueve (y captura si es necesario)
+            if self.__tablero__.mover_checker(posicion_inicial, posicion_final, jugador.color):
+                self.__dados__.usar_valor(valor_dado)
+                return True
         return False
 
     def usar_dados(self, valor):
@@ -179,19 +182,52 @@ class BackgammonGame:
         Returns:
             True si el reingreso fue exitoso, False en caso contrario
         """
-        if not self.puede_mover(jugador):
-            return False
-        if not self.hay_fichas_en_almacen(jugador):
+        if not self.puede_mover(jugador) or not self.hay_fichas_en_almacen(jugador):
             return False
         if valor_dado not in self.__dados__.valores_dados():
             return False
-        if jugador.color == "blanco":
-            posicion_final = valor_dado - 1
-        else:
-            posicion_final = 24 - valor_dado
-        if self.__tablero__.sacar_checker_comida(jugador.color, posicion_final):
+            
+        pos_final = (valor_dado - 1) if jugador.color == "blanco" else (24 - valor_dado)
+        
+        if self.__tablero__.sacar_checker_comida(jugador.color, pos_final):
             self.__dados__.usar_valor(valor_dado)
             return True
+        return False
+    
+    def realizar_bear_off(self, jugador: Jugador, posicion, valor_dado):
+        """Intenta sacar una ficha del tablero (bear off)."""
+        if not self.puede_mover(jugador) or not self.__tablero__.bear_off_permitido(jugador.color):
+            return False
+        if valor_dado not in self.__dados__.valores_dados():
+            return False
+
+        distancia_para_salir = (24 - posicion) if jugador.color == "blanco" else (posicion + 1)
+
+        if valor_dado == distancia_para_salir:
+            if self.__tablero__.bear_off(posicion, jugador.color):
+                self.__dados__.usar_valor(valor_dado)
+                return True
+
+        elif valor_dado > distancia_para_salir:
+            hay_fichas_mas_atras = False
+            if jugador.color == "blanco":
+                # Para las blancas, "más atrás" significa un índice menor (puntos 19, 20, etc.)
+                for i in range(18, posicion):
+                    if self.__tablero__.estado_tablero()[i] and self.__tablero__.estado_tablero()[i][0] == jugador.color:
+                        hay_fichas_mas_atras = True
+                        break
+            else: # Para las negras
+                # Para las negras, "más atrás" significa un índice mayor (puntos 6, 5, etc.)
+                for i in range(posicion + 1, 6):
+                    if self.__tablero__.estado_tablero()[i] and self.__tablero__.estado_tablero()[i][0] == jugador.color:
+                        hay_fichas_mas_atras = True
+                        break
+            
+            if not hay_fichas_mas_atras:
+                if self.__tablero__.bear_off(posicion, jugador.color):
+                    self.__dados__.usar_valor(valor_dado)
+                    return True
+
         return False
     
     def verificar_ganador(self):
