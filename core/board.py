@@ -88,20 +88,26 @@ class Tablero:
             Color de la ficha movida o None si el movimiento falló
         """
         try:
-            #Verificar que la ficha pertenezca al jugador
-            if self.__contenedor__[posicion_inicial][-1] != color:
+            if not self.__contenedor__[posicion_inicial] or self.__contenedor__[posicion_inicial][-1] != color:
                 return None
-            #Verificar que las posiciones estén en rango valido
-            if 0 <= posicion_inicial < 24 and 0 <= posicion_final < 24:
-                #verificar que hay fichas en la posicion inicial
-                if self.__contenedor__[posicion_inicial]:
-                    #mover la ficha
-                    checker = self.__contenedor__[posicion_inicial].pop()
-                    self.__contenedor__[posicion_final].append(checker)
-                    return checker
+
+            destino = self.__contenedor__[posicion_final]
+            if destino and len(destino) == 1 and destino[0] != color:
+                enemigo_capturado = destino.pop()
+                self.agregar_a_almacen(enemigo_capturado, 1)
+
+            checker_a_mover = self.__contenedor__[posicion_inicial].pop()
+            self.__contenedor__[posicion_final].append(checker_a_mover)
+            return checker_a_mover
+
         except (ValueError, IndexError) as e:
             print(f"Error al mover checker: {e}")
             return None
+        
+    def agregar_a_almacen(self, color, cantidad):
+        """Agrega una o más fichas a la barra (almacén)."""
+        if color in self.__almacen_ficha__:
+            self.__almacen_ficha__[color] += cantidad
 
     def sacar_checker(self, posicion):
         """
@@ -124,26 +130,6 @@ class Tablero:
         """
         return self.__almacen_ficha__
     
-    def comer_checker(self, posicion_final, color):
-        """
-        Captura una ficha enemiga que está sola en una posición (blot).
-        La ficha capturada se envía al almacén y debe reingresar antes de mover otras fichas.
-        Argumentos:
-            posicion_final: Posición donde se realiza la captura
-            color: Color del jugador que captura
-        Returns:
-            True si se capturó una ficha, False en caso contrario
-        """
-        if not self.__contenedor__[posicion_final]:
-            return False
-        elif len(self.__contenedor__[posicion_final]) == 1 and self.__contenedor__[posicion_final][0] != color:
-            enemigo = self.__contenedor__[posicion_final].pop()
-            self.__contenedor__[posicion_final] = [color]
-            self.__almacen_ficha__[enemigo] += 1
-            return True
-        elif len(self.__contenedor__[posicion_final]) >= 2:
-            return False
-        return False
 
     def sacar_checker_comida(self, color, posicion_final):
         """
@@ -155,14 +141,19 @@ class Tablero:
         Returns:
             True si el reingreso fue exitoso, False en caso contrario
         """
-        if self.__almacen_ficha__[color] <= 0:
+        if not (0 <= posicion_final < 24):
             return False
-        if not (0 <= posicion_final < len(self.__contenedor__)):
+        if self.__almacen_ficha__.get(color, 0) == 0:
             return False
-        # Verificar si hay 2 o más fichas enemigas en la posición
-        if len(self.__contenedor__[posicion_final]) >= 2:
-            if self.__contenedor__[posicion_final][0] != color:
-                return False
+
+        destino = self.__contenedor__[posicion_final]
+        if destino and destino[0] != color and len(destino) >= 2:
+            return False
+        
+        if destino and destino[0] != color and len(destino) == 1:
+            enemigo_capturado = destino.pop()
+            self.agregar_a_almacen(enemigo_capturado, 1)
+
         self.__contenedor__[posicion_final].append(color)
         self.__almacen_ficha__[color] -= 1
         return True
@@ -175,15 +166,11 @@ class Tablero:
         Returns:
             True si el jugador ha ganado, False en caso contrario
         """
-        if color not in self.__almacen_ficha__:
+        fichas_en_banco = self.__banco__.get(color, 0)
+        if fichas_en_banco == 15:
+            return True
+        else:
             return False
-        elif self.__almacen_ficha__[color] > 0:
-            return False
-        elif self.__contenedor__ == [[] for _ in range(24)]:
-            if self.__banco__[color] == 15:
-                return True
-        
-        return False
     
     def bear_off_permitido(self, color):
         """

@@ -355,6 +355,24 @@ class TestBackgammonGame(unittest.TestCase):
         juego.cambiar_turno()
         juego.cambiar_turno()
         self.assertEqual(juego.get_turno_actual(), turno_inicial)
-
+    @patch("core.dice.random.randint", side_effect=[5, 5])
+    def test_bear_off_fallido_con_dado_grande_y_ficha_atras(self, mock_randint):
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.__tablero__.__contenedor__ = [[] for _ in range(24)]
+        juego.__tablero__.__contenedor__[20] = ["blanco"]
+        juego.__tablero__.__contenedor__[18] = ["blanco"]
+        juego.__turno__ = juego.__jugador2__
+        juego.tirar_dados()
+        valor_dado = juego.__dados__.valores_dados()[0]
+        resultado = juego.realizar_bear_off(juego.__jugador2__, 20, 5)
+        self.assertFalse(resultado)
+    def test_bear_off_fallido_con_dado_insuficiente(self):
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.__tablero__.__contenedor__ = [[] for _ in range(24)]
+        juego.__tablero__.__contenedor__[20] = ["blanco"]
+        juego.__turno__ = juego.__jugador2__
+        juego.__dados__.__valores__ = [3]
+        resultado = juego.realizar_bear_off(juego.__jugador2__, 20, 3)
+        self.assertFalse(resultado)
 if __name__ == '__main__':
     unittest.main()

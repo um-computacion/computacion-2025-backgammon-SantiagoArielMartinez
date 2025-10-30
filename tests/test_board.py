@@ -101,21 +101,6 @@ class TestTablero(unittest.TestCase):
         self.assertEqual(almacen["blanco"], 0)
         self.assertEqual(almacen["negro"], 0)
     
-    def test_comer_checker(self): 
-        self.tab.__contenedor__[10] = ["negro"]
-        resultado = self.tab.comer_checker(10, "blanco")
-        self.assertTrue(resultado)
-        self.assertEqual(self.tab.__almacen_ficha__["negro"], 1)
-    
-    def test_comer_checker_posicion_vacia(self):
-        resultado = self.tab.comer_checker(1, "blanco")
-        self.assertFalse(resultado)
-    
-    def test_comer_checker_multiples_fichas_enemigas(self):
-        self.tab.__contenedor__[10] = ["negro", "negro"]
-        resultado = self.tab.comer_checker(10, "blanco")
-        self.assertFalse(resultado)
-    
     def test_sacar_checker_comida_exitoso(self):
         self.tab.__almacen_ficha__["blanco"] = 1
         resultado = self.tab.sacar_checker_comida("blanco", 2)
@@ -203,12 +188,6 @@ class TestTablero(unittest.TestCase):
         resultado = self.tab.movimiento_valido(5, 0, jugador_negro)
         self.assertTrue(resultado)
 
-    def test_comer_checker_misma_ficha_color(self):
-        """Test intentar comer ficha del mismo color"""
-        self.tab.__contenedor__[10] = ["blanco"]
-        resultado = self.tab.comer_checker(10, "blanco")
-        self.assertFalse(resultado)
-
     def test_sacar_checker_comida_posicion_negativa(self):
         """Test sacar checker comida con posición negativa"""
         self.tab.__almacen_ficha__["blanco"] = 1
@@ -228,8 +207,8 @@ class TestTablero(unittest.TestCase):
 
     def test_bear_off_color_incorrecto(self):
         """Test bear off con color incorrecto"""
-        self.tab._Tablero__contenedor__ = [[] for _ in range(24)]
-        self.tab._Tablero__contenedor__[18] = ["negro"]
+        self.tab.__contenedor__ = [[] for _ in range(24)]
+        self.tab.__contenedor__[18] = ["negro"]
         resultado = self.tab.bear_off(18, "blanco")
         self.assertFalse(resultado)
 
@@ -253,6 +232,12 @@ class TestTablero(unittest.TestCase):
             self.assertIsNone(resultado)
         except (ValueError, IndexError):
             pass
+    
+    def test_mover_checker_a_posicion_invalida(self):
+        self.tab.tablero_inicial()
+        resultado = self.tab.mover_checker(0, 25, "blanco")
+        self.assertIsNone(resultado)
+    
 
 if __name__ == '__main__':
     unittest.main()

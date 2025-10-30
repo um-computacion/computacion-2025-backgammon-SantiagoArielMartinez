@@ -64,8 +64,8 @@ class TestDados(unittest.TestCase):
         dado.tirar_dado()
         dado.resetear_dados()
         self.assertEqual(len(dado.valores_dados()), 0)
-
-    def test_resetear_dados_permite_nuevo_tiro(self):
+    @patch("core.dice.random.randint", side_effect=[4, 2, 5, 6])
+    def test_resetear_dados_permite_nuevo_tiro(self,mock_randint):
         dado = Dados()
         dado.tirar_dado()
         dado.resetear_dados()
