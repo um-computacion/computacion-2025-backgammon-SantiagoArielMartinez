@@ -1,25 +1,17 @@
-version: '3.8'
-
 services:
-  backgammon-tests:
-    build: .
-    container_name: backgammon-tests
-    volumes:
-      - .:/app
-    command: sh -c "python3 -m coverage run -m unittest discover tests && python3 -m coverage report -m"
-
-  backgammon-cli:
+  cli:
     build: .
     container_name: backgammon-cli
     volumes:
       - .:/app
     stdin_open: true
     tty: true
-    command: python3 -m cli.cli
+    command: python -m cli.cli
 
-  backgammon-pylint:
+  test:
     build: .
-    container_name: backgammon-pylint
+    container_name: backgammon-test
     volumes:
       - .:/app
-    command: pylint core/ cli/
+    command: >
+      sh -c "pytest --cov=. --cov-report=term-missing --cov-report=html"
