@@ -5,147 +5,40 @@ Name                     Stmts   Miss  Cover   Missing
 ------------------------------------------------------
 assets/__init__.py           0      0   100%
 cli/__init__.py              0      0   100%
+cli/cli.py                  97     18    81%   77-78, 82-84, 106, 118-131, 135-136
 core/__init__.py             0      0   100%
-core/backgammongame.py     107     12    89%   188, 190, 193-195, 204-207, 209-211
-core/board.py               96      6    94%   83-84, 93-94, 127-128
-core/checkers.py            14      5    64%   19, 24, 31-33
-core/dice.py                27      3    89%   31-32, 56
-core/player.py              21      6    71%   29-33, 45
+core/backgammongame.py     112     17    85%   102-103, 152-153, 194, 196, 199-201, 211-215, 217-219
+core/board.py              100      4    96%   91-92, 137-138
+core/checkers.py            14      0   100%
+core/dice.py                27      0   100%
+core/exceptions.py          12      0   100%
+core/player.py              21      1    95%   40
 pygame_ui/__init__.py        0      0   100%
 ------------------------------------------------------
-TOTAL                      265     32    88%
+TOTAL                      383     40    90%
 
 ```
 ## Pylint Report
 ```text
-************* Module computacion-2025-backgammon-SantiagoArielMartinez.core.checkers
-core/checkers.py:14:36: C0303: Trailing whitespace (trailing-whitespace)
-core/checkers.py:38:0: C0304: Final newline missing (missing-final-newline)
-core/checkers.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module computacion-2025-backgammon-SantiagoArielMartinez.core.backgammongame
-core/backgammongame.py:24:42: C0303: Trailing whitespace (trailing-whitespace)
-core/backgammongame.py:77:59: C0303: Trailing whitespace (trailing-whitespace)
-core/backgammongame.py:153:9: C0303: Trailing whitespace (trailing-whitespace)
-core/backgammongame.py:178:0: C0303: Trailing whitespace (trailing-whitespace)
-core/backgammongame.py:180:0: C0303: Trailing whitespace (trailing-whitespace)
-core/backgammongame.py:200:0: C0301: Line too long (121/100) (line-too-long)
-core/backgammongame.py:203:17: C0303: Trailing whitespace (trailing-whitespace)
-core/backgammongame.py:205:0: C0301: Line too long (121/100) (line-too-long)
-core/backgammongame.py:207:29: C0303: Trailing whitespace (trailing-whitespace)
-core/backgammongame.py:224:0: C0304: Final newline missing (missing-final-newline)
-core/backgammongame.py:185:4: R0912: Too many branches (13/12) (too-many-branches)
+core/backgammongame.py:233:0: C0305: Trailing newlines (trailing-newlines)
+core/backgammongame.py:191:4: R0912: Too many branches (13/12) (too-many-branches)
 ************* Module computacion-2025-backgammon-SantiagoArielMartinez.core.board
-core/board.py:15:50: C0303: Trailing whitespace (trailing-whitespace)
-core/board.py:28:48: C0303: Trailing whitespace (trailing-whitespace)
-core/board.py:30:47: C0303: Trailing whitespace (trailing-whitespace)
-core/board.py:31:47: C0303: Trailing whitespace (trailing-whitespace)
-core/board.py:52:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
-core/board.py:54:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
-core/board.py:55:24: C0303: Trailing whitespace (trailing-whitespace)
-core/board.py:79:0: C0301: Line too long (111/100) (line-too-long)
-core/board.py:119:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
-core/board.py:180:0: C0304: Final newline missing (missing-final-newline)
-core/board.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-core/board.py:50:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
-core/board.py:58:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
-core/board.py:38:4: R0911: Too many return statements (8/6) (too-many-return-statements)
-core/board.py:141:8: R1703: The if statement can be replaced with 'return bool(test)' (simplifiable-if-statement)
-core/board.py:141:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
-core/board.py:173:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
-************* Module computacion-2025-backgammon-SantiagoArielMartinez.core.player
-core/player.py:45:0: C0304: Final newline missing (missing-final-newline)
-core/player.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+core/board.py:188:0: C0304: Final newline missing (missing-final-newline)
+core/board.py:44:4: R0911: Too many return statements (8/6) (too-many-return-statements)
+************* Module computacion-2025-backgammon-SantiagoArielMartinez.core.exceptions
+core/exceptions.py:7:4: W0107: Unnecessary pass statement (unnecessary-pass)
+core/exceptions.py:11:4: W0107: Unnecessary pass statement (unnecessary-pass)
+core/exceptions.py:15:4: W0107: Unnecessary pass statement (unnecessary-pass)
+core/exceptions.py:19:4: W0107: Unnecessary pass statement (unnecessary-pass)
+core/exceptions.py:23:4: W0107: Unnecessary pass statement (unnecessary-pass)
+core/exceptions.py:27:4: W0107: Unnecessary pass statement (unnecessary-pass)
 ************* Module computacion-2025-backgammon-SantiagoArielMartinez.core.dice
-core/dice.py:1:13: C0303: Trailing whitespace (trailing-whitespace)
-core/dice.py:25:49: C0303: Trailing whitespace (trailing-whitespace)
-core/dice.py:28:17: C0303: Trailing whitespace (trailing-whitespace)
-core/dice.py:62:0: C0304: Final newline missing (missing-final-newline)
-core/dice.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-core/dice.py:31:15: W0718: Catching too general exception Exception (broad-exception-caught)
-core/dice.py:31:8: W0612: Unused variable 'e' (unused-variable)
-core/dice.py:15:8: W0238: Unused private member `Dados.__valores` (unused-private-member)
-core/dice.py:27:16: W0201: Attribute '__valores__' defined outside __init__ (attribute-defined-outside-init)
-core/dice.py:29:16: W0201: Attribute '__valores__' defined outside __init__ (attribute-defined-outside-init)
+core/dice.py:36:25: C0303: Trailing whitespace (trailing-whitespace)
+core/dice.py:36:15: W0718: Catching too general exception Exception (broad-exception-caught)
 ************* Module computacion-2025-backgammon-SantiagoArielMartinez.cli.cli
-cli/cli.py:9:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:26:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:28:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:37:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:39:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:41:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:42:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:43:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:45:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:46:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:47:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:48:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:49:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:52:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:53:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:54:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:55:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:56:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:57:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:58:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:59:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:60:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:61:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:62:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:63:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:64:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:65:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:66:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:67:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:68:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:71:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:72:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:73:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:74:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:75:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:76:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:77:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:78:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:79:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:80:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:81:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:82:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:83:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:84:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:85:0: W0311: Bad indentation. Found 19 spaces, expected 20 (bad-indentation)
-cli/cli.py:86:0: W0311: Bad indentation. Found 19 spaces, expected 20 (bad-indentation)
-cli/cli.py:87:0: W0311: Bad indentation. Found 23 spaces, expected 24 (bad-indentation)
-cli/cli.py:88:0: W0311: Bad indentation. Found 19 spaces, expected 20 (bad-indentation)
-cli/cli.py:89:0: W0311: Bad indentation. Found 23 spaces, expected 24 (bad-indentation)
-cli/cli.py:90:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:91:0: W0311: Bad indentation. Found 19 spaces, expected 20 (bad-indentation)
-cli/cli.py:92:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:93:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:94:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:95:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:96:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:97:0: W0311: Bad indentation. Found 15 spaces, expected 16 (bad-indentation)
-cli/cli.py:98:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:100:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:101:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:102:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:103:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:104:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:105:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:106:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:107:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:108:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:109:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:110:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:111:0: W0311: Bad indentation. Found 11 spaces, expected 12 (bad-indentation)
-cli/cli.py:112:0: C0303: Trailing whitespace (trailing-whitespace)
-cli/cli.py:113:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:114:0: W0311: Bad indentation. Found 7 spaces, expected 8 (bad-indentation)
-cli/cli.py:118:0: W0311: Bad indentation. Found 3 spaces, expected 4 (bad-indentation)
-cli/cli.py:119:0: C0304: Final newline missing (missing-final-newline)
-cli/cli.py:119:0: W0311: Bad indentation. Found 3 spaces, expected 4 (bad-indentation)
-cli/cli.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-cli/cli.py:3:0: C0115: Missing class docstring (missing-class-docstring)
-cli/cli.py:59:11: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+cli/cli.py:137:0: C0305: Trailing newlines (trailing-newlines)
+cli/cli.py:61:8: C0415: Import outside toplevel (core.exceptions.NoEsTuTurno, core.exceptions.SinDados, core.exceptions.PosicionInvalida, core.exceptions.PosicionVacia) (import-outside-toplevel)
 ************* Module computacion-2025-backgammon-SantiagoArielMartinez.pygame_ui.pygame_ui
 pygame_ui/pygame_ui.py:15:0: C0301: Line too long (564/100) (line-too-long)
 pygame_ui/pygame_ui.py:18:0: C0301: Line too long (347/100) (line-too-long)
@@ -196,7 +89,6 @@ pygame_ui/pygame_ui.py:201:0: C0303: Trailing whitespace (trailing-whitespace)
 pygame_ui/pygame_ui.py:208:0: C0301: Line too long (114/100) (line-too-long)
 pygame_ui/pygame_ui.py:217:0: C0304: Final newline missing (missing-final-newline)
 pygame_ui/pygame_ui.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-pygame_ui/pygame_ui.py:2:0: E0401: Unable to import 'pygame' (import-error)
 pygame_ui/pygame_ui.py:6:0: C0115: Missing class docstring (missing-class-docstring)
 pygame_ui/pygame_ui.py:15:8: C0103: Attribute name "COLOR_FONDO_GENERAL" doesn't conform to snake_case naming style (invalid-name)
 pygame_ui/pygame_ui.py:15:52: C0103: Attribute name "COLOR_TRI_A" doesn't conform to snake_case naming style (invalid-name)
@@ -231,6 +123,7 @@ pygame_ui/pygame_ui.py:40:38: C0321: More than one statement on a single line (m
 pygame_ui/pygame_ui.py:41:40: C0321: More than one statement on a single line (multiple-statements)
 pygame_ui/pygame_ui.py:44:70: C0321: More than one statement on a single line (multiple-statements)
 pygame_ui/pygame_ui.py:45:268: C0321: More than one statement on a single line (multiple-statements)
+pygame_ui/pygame_ui.py:45:315: E1101: Module 'pygame' has no 'SRCALPHA' member (no-member)
 pygame_ui/pygame_ui.py:47:4: C0116: Missing function or method docstring (missing-function-docstring)
 pygame_ui/pygame_ui.py:51:30: C0321: More than one statement on a single line (multiple-statements)
 pygame_ui/pygame_ui.py:52:85: C0321: More than one statement on a single line (multiple-statements)
@@ -251,6 +144,7 @@ pygame_ui/pygame_ui.py:77:29: C0103: Attribute name "ALTO_PANTALLA" doesn't conf
 pygame_ui/pygame_ui.py:93:8: C0103: Attribute name "COLOR_BOTON" doesn't conform to snake_case naming style (invalid-name)
 pygame_ui/pygame_ui.py:94:8: C0103: Attribute name "COLOR_BOTON_TEXTO" doesn't conform to snake_case naming style (invalid-name)
 pygame_ui/pygame_ui.py:74:0: R0902: Too many instance attributes (17/7) (too-many-instance-attributes)
+pygame_ui/pygame_ui.py:76:8: E1101: Module 'pygame' has no 'init' member (no-member)
 pygame_ui/pygame_ui.py:101:53: C0321: More than one statement on a single line (multiple-statements)
 pygame_ui/pygame_ui.py:112:53: C0321: More than one statement on a single line (multiple-statements)
 pygame_ui/pygame_ui.py:103:8: R1702: Too many nested blocks (6/5) (too-many-nested-blocks)
@@ -265,13 +159,19 @@ pygame_ui/pygame_ui.py:127:4: R0912: Too many branches (21/12) (too-many-branche
 pygame_ui/pygame_ui.py:176:35: C0321: More than one statement on a single line (multiple-statements)
 pygame_ui/pygame_ui.py:178:20: C0321: More than one statement on a single line (multiple-statements)
 pygame_ui/pygame_ui.py:205:4: C0116: Missing function or method docstring (missing-function-docstring)
+pygame_ui/pygame_ui.py:208:29: E1101: Module 'pygame' has no 'QUIT' member (no-member)
+pygame_ui/pygame_ui.py:208:55: E1101: Module 'pygame' has no 'KEYDOWN' member (no-member)
+pygame_ui/pygame_ui.py:208:84: E1101: Module 'pygame' has no 'K_ESCAPE' member (no-member)
+pygame_ui/pygame_ui.py:208:101: E1101: Module 'pygame' has no 'K_q' member (no-member)
+pygame_ui/pygame_ui.py:210:31: E1101: Module 'pygame' has no 'MOUSEBUTTONDOWN' member (no-member)
 pygame_ui/pygame_ui.py:212:39: C0321: More than one statement on a single line (multiple-statements)
+pygame_ui/pygame_ui.py:213:8: E1101: Module 'pygame' has no 'quit' member (no-member)
 pygame_ui/pygame_ui.py:213:23: C0321: More than one statement on a single line (multiple-statements)
 pygame_ui/pygame_ui.py:74:0: R0903: Too few public methods (1/2) (too-few-public-methods)
 pygame_ui/pygame_ui.py:3:0: C0411: standard import "sys" should be placed before third party import "pygame" (wrong-import-order)
 
 -----------------------------------
-Your code has been rated at 5.94/10
+Your code has been rated at 7.27/10
 
 
 ```
