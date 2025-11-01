@@ -1,0 +1,17 @@
+services:
+  cli:
+    build: .
+    container_name: backgammon-cli
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true
+    command: python -m cli.cli
+
+  test:
+    build: .
+    container_name: backgammon-test
+    volumes:
+      - .:/app
+    command: >
+      sh -c "pytest --cov=. --cov-report=term-missing --cov-report=html"
