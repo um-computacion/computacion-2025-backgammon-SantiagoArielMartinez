@@ -10,6 +10,9 @@ core/board.py:188:0: C0304: Final newline missing (missing-final-newline)
 core/board.py:4:0: E0401: Unable to import 'core.player' (import-error)
 core/board.py:5:0: E0401: Unable to import 'core.exceptions' (import-error)
 core/board.py:44:4: R0911: Too many return statements (8/6) (too-many-return-statements)
+************* Module computacion-2025-backgammon-SantiagoArielMartinez.core.dice
+core/dice.py:36:25: C0303: Trailing whitespace (trailing-whitespace)
+core/dice.py:36:15: W0718: Catching too general exception Exception (broad-exception-caught)
 ************* Module computacion-2025-backgammon-SantiagoArielMartinez.core.backgammongame
 core/backgammongame.py:233:0: C0305: Trailing newlines (trailing-newlines)
 core/backgammongame.py:5:0: E0401: Unable to import 'core.player' (import-error)
@@ -24,5 +27,5 @@ cli/cli.py:61:8: E0401: Unable to import 'core.exceptions' (import-error)
 cli/cli.py:61:8: C0415: Import outside toplevel (core.exceptions.NoEsTuTurno, core.exceptions.SinDados, core.exceptions.PosicionInvalida, core.exceptions.PosicionVacia) (import-outside-toplevel)
 
 ------------------------------------------------------------------
-Your code has been rated at 8.63/10 (previous run: 8.63/10, +0.00)
+Your code has been rated at 8.58/10 (previous run: 8.63/10, -0.05)
 
