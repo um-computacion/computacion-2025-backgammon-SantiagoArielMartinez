@@ -10,6 +10,20 @@ Implementación del juego clásico de Backgammon en Python con múltiples interf
 - 🖥️ **CLI** (Interfaz de línea de comandos)
 - 🎮 **Pygame** (Interfaz gráfica)
 
+## 🐳 Inicio Rápido con Docker
+
+### Modo Testing
+```bash
+docker build -t backgammon-game .
+docker run --rm backgammon-game
+```
+
+### Modo Juego
+```bash
+docker build -t backgammon-game .
+docker run --rm -it backgammon-game python3 -m cli.cli
+```
+
 ## 🚀 Instalación
 
 ### Opción 1: Instalación Local
@@ -25,18 +39,41 @@ pip install -r requirements.txt
 
 ### Opción 2: Docker 🐳
 
+Para usar el proyecto con Docker, primero construye la imagen:
+
 ```bash
-# Construir la imagen
 docker build -t backgammon-game .
-
-# Ejecutar los tests
-docker run backgammon-game
-
-# Jugar en modo CLI
-docker run -it backgammon-game python -m cli.cli
 ```
 
-Ver [README-DOCKER.md](README-DOCKER.md) para más detalles sobre Docker.
+#### Modo Testing (Ejecutar Tests)
+
+Ejecuta los tests con coverage usando Docker:
+
+```bash
+# Con Docker
+docker run --rm backgammon-game
+
+# Con Docker Compose
+docker-compose up backgammon-tests
+```
+
+Esto ejecutará todos los tests unitarios y mostrará el reporte de cobertura.
+
+#### Modo Juego (Jugar Backgammon)
+
+Para jugar al Backgammon en modo CLI usando Docker:
+
+```bash
+# Con Docker
+docker run --rm -it backgammon-game python3 -m cli.cli
+
+# Con Docker Compose
+docker-compose run backgammon-cli
+```
+
+**Nota**: El modo gráfico (Pygame) no funciona en Docker sin configuración X11 adicional. Se recomienda usar la instalación local para la interfaz gráfica.
+
+Ver [README-DOCKER.md](README-DOCKER.md) para guía completa de instalación y uso de Docker.
 
 ## 🎮 Cómo Jugar
 
