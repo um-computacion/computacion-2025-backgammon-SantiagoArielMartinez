@@ -1,3 +1,8 @@
+"""
+Módulo que define la clase Ficha para el juego de Backgammon.
+"""
+
+
 class Ficha:
     """
     Clase que representa una ficha (checker) en el juego de Backgammon.
@@ -11,17 +16,20 @@ class Ficha:
             posicion: Posición de la ficha en el tablero, -1 si está en el almacén
         """
         self.__ficha__ = ficha
-        self.__posicion__ = posicion  
+        self.__posicion__ = posicion
+
     def get_ficha(self):
         """
         Devuelve el color de la ficha.
         """
         return self.__ficha__
+
     def get_movimiento(self):
         """
         Devuelve la posición de la ficha.
         """
         return self.__posicion__
+
     def adentro_almacen(self):
         """
         Verifica si la ficha está dentro del almacén.
@@ -31,6 +39,7 @@ class Ficha:
         if self.__posicion__ == -1:
             return True
         return False
+
     def __str__(self):
         """
         Devuelve una representación en cadena de la ficha y su posición.

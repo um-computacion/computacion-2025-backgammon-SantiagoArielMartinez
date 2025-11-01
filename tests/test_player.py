@@ -46,5 +46,30 @@ class TestJugador(unittest.TestCase):
         jugador2 = Jugador("Test", "blanco")
         self.assertTrue(jugador1.nombre == jugador2.nombre)
 
+    def test_jugador_setter_nombre_invalido_no_string(self):
+        jugador = Jugador("Test", "blanco")
+        with self.assertRaises(ValueError):
+            jugador.jugador = 123
+
+    def test_jugador_setter_nombre_vacio(self):
+        jugador = Jugador("Test", "blanco")
+        with self.assertRaises(ValueError):
+            jugador.jugador = ""
+
+    def test_jugador_setter_nombre_solo_espacios(self):
+        jugador = Jugador("Test", "blanco")
+        with self.assertRaises(ValueError):
+            jugador.jugador = "   "
+
+    def test_jugador_setter_color_valido(self):
+        jugador = Jugador("Test", "blanco")
+        jugador.color = "negro"
+        self.assertEqual(jugador.color, "negro")
+
+    def test_jugador_setter_color_cambio(self):
+        jugador = Jugador("Test", "negro")
+        jugador.color = "blanco"
+        self.assertEqual(jugador.color, "blanco")
+
 if __name__ == '__main__':
     unittest.main()

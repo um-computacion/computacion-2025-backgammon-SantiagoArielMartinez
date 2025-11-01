@@ -132,5 +132,28 @@ class TestDados(unittest.TestCase):
         self.assertEqual(len(dado.valores_dados()), 1)
         self.assertEqual(dado.valores_dados()[0], 4)
 
+    @patch("core.dice.random.randint", side_effect=Exception("Error simulado"))
+    def test_tirar_dado_con_excepcion(self, mock_randint):
+        """Test que tirar_dado maneja excepciones correctamente"""
+        dado = Dados()
+        resultado = dado.tirar_dado()
+        self.assertEqual(resultado, ())
+
+    @patch("core.dice.random.randint", side_effect=[5, 3])
+    def test_quedan_valores_true(self, mock_randint):
+        """Test quedan_valores retorna True cuando hay valores"""
+        dado = Dados()
+        dado.tirar_dado()
+        self.assertTrue(dado.quedan_valores())
+
+    @patch("core.dice.random.randint", side_effect=[5, 3])
+    def test_quedan_valores_false_despues_de_usar_todos(self, mock_randint):
+        """Test quedan_valores retorna False cuando no hay valores"""
+        dado = Dados()
+        dado.tirar_dado()
+        dado.usar_valor(5)
+        dado.usar_valor(3)
+        self.assertFalse(dado.quedan_valores())
+
 if __name__ == '__main__':
     unittest.main()

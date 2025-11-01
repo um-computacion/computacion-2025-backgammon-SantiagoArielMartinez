@@ -5,6 +5,7 @@ Controla el flujo del juego, turnos y movimientos.
 from core.player import Jugador
 from core.board import Tablero
 from core.dice import Dados
+from core.exceptions import NoEsTuTurno, SinDados
 class BackgammonGame:
     """
     Clase principal que controla el flujo del juego de Backgammon.
@@ -21,7 +22,7 @@ class BackgammonGame:
         self.__tablero__ = Tablero()
         self.__dados__ = Dados()
         self.__turno__ = self.__jugador1__
-        self.__tablero__.tablero_inicial()        
+        self.__tablero__.tablero_inicial()
     def get_jugador1(self):
         """
         Retorna el primer jugador del juego.
@@ -74,7 +75,7 @@ class BackgammonGame:
         """
         if self.__turno__ == self.__jugador1__:
             return f"Es el turno de {self.__jugador1__.nombre}"
-        return f"Es el turno de {self.__jugador2__.nombre}"   
+        return f"Es el turno de {self.__jugador2__.nombre}"
     def cambiar_turno(self):
         """
         Cambia el turno del jugador actual al otro jugador.
@@ -112,11 +113,16 @@ class BackgammonGame:
             valor_dado: Valor del dado a usar para el movimiento
         Returns:
             True si el movimiento fue exitoso, False en caso contrario
+        Levanta:
+            NoEsTuTurno: Si no es el turno del jugador
+            SinDados: Si no hay dados disponibles
         """
+        if jugador != self.__turno__:
+            raise NoEsTuTurno(f"No es el turno de {jugador.nombre}")
         if not self.puede_mover(jugador):
             return False
         if valor_dado not in self.__dados__.valores_dados():
-            return False
+            raise SinDados(f"El dado {valor_dado} no está disponible")
         if self.__tablero__.movimiento_valido(posicion_inicial, posicion_final, jugador):
             if self.__tablero__.mover_checker(posicion_inicial, posicion_final, jugador.color):
                 self.__dados__.usar_valor(valor_dado)
@@ -150,12 +156,12 @@ class BackgammonGame:
             "turno" : self.__turno__.nombre,
             "dados" : dados_actuales,
             "almacen_fichas" : self.__tablero__.__almacen_ficha__
-        }    
+        }
     def hay_fichas_en_almacen(self, jugador: Jugador):
         """
         Verifica si el jugador tiene fichas capturadas en el almacén (barra).
         Argumentos:
-            jugador: Objeto Jugador a verificar 
+            jugador: Objeto Jugador a verificar
         Returns:
             True si tiene fichas en el almacén, False en caso contrario
         """
@@ -175,9 +181,9 @@ class BackgammonGame:
             return False
         if valor_dado not in self.__dados__.valores_dados():
             return False
-            
+
         pos_final = (valor_dado - 1) if jugador.color == "blanco" else (24 - valor_dado)
-        
+
         if self.__tablero__.sacar_checker_comida(jugador.color, pos_final):
             self.__dados__.usar_valor(valor_dado)
             return True
@@ -197,14 +203,16 @@ class BackgammonGame:
             hay_fichas_mas_atras = False
             if jugador.color == "blanco":
                 for i in range(18, posicion):
-                    if self.__tablero__.estado_tablero()[i] and self.__tablero__.estado_tablero()[i][0] == jugador.color:
+                    tablero_i = self.__tablero__.estado_tablero()[i]
+                    if tablero_i and tablero_i[0] == jugador.color:
                         hay_fichas_mas_atras = True
                         break
-            else: 
+            else:
                 for i in range(posicion + 1, 6):
-                    if self.__tablero__.estado_tablero()[i] and self.__tablero__.estado_tablero()[i][0] == jugador.color:
+                    tablero_i = self.__tablero__.estado_tablero()[i]
+                    if tablero_i and tablero_i[0] == jugador.color:
                         hay_fichas_mas_atras = True
-                        break  
+                        break
             if not hay_fichas_mas_atras:
                 if self.__tablero__.bear_off(posicion, jugador.color):
                     self.__dados__.usar_valor(valor_dado)
@@ -222,3 +230,4 @@ class BackgammonGame:
         if self.__tablero__.verificar_ganador(self.__jugador2__.color):
             return self.__jugador2__.nombre
         return None
+

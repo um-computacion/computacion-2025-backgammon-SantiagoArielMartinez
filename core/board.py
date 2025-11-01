@@ -1,4 +1,10 @@
+"""
+Módulo que define la clase Tablero para el juego de Backgammon.
+"""
 from core.player import Jugador
+from core.exceptions import PosicionInvalida, PosicionVacia
+
+
 class Tablero:
     """
     Clase que representa el tablero de Backgammon.
@@ -12,7 +18,7 @@ class Tablero:
         """
         self.__contenedor__ = [
             [],[],[],[],[],[],  [],[],[],[],[],[],
-            [],[],[],[],[],[],  [],[],[],[],[],[], 
+            [],[],[],[],[],[],  [],[],[],[],[],[],
                               ]
         self.__almacen_ficha__ = {"blanco": 0, "negro": 0}
         self.__banco__ = {"blanco": 0, "negro": 0}
@@ -25,10 +31,10 @@ class Tablero:
         """
         self.__contenedor__[0] = ["blanco"] * 2
         self.__contenedor__[11] = ["blanco"] * 5
-        self.__contenedor__[17] = ["blanco"] * 5  
+        self.__contenedor__[17] = ["blanco"] * 5
         self.__contenedor__[19] = ["blanco"] * 3
-        self.__contenedor__[23] = ["negro"] * 5  
-        self.__contenedor__[12] = ["negro"] * 2 
+        self.__contenedor__[23] = ["negro"] * 5
+        self.__contenedor__[12] = ["negro"] * 2
         self.__contenedor__[7] = ["negro"] * 3
         self.__contenedor__[5] = ["negro"] * 5
         return self.__contenedor__
@@ -43,25 +49,25 @@ class Tablero:
         Argumentos:
             posicion_inicial: Posición de origen (0-23)
             posicion_final: Posición de destino (0-23)
-            jugador: Objeto Jugador que intenta mover  
+            jugador: Objeto Jugador que intenta mover
         Returns:
             True si el movimiento es válido, False en caso contrario
         """
         if self.__almacen_ficha__[jugador.color] > 0:
             return False
-        elif not (0 <= posicion_inicial < len(self.__contenedor__)):
+        if not 0 <= posicion_inicial < len(self.__contenedor__):
             return False
-        elif not (0 <= posicion_final < len(self.__contenedor__)):
-            return False 
+        if not 0 <= posicion_final < len(self.__contenedor__):
+            return False
         inicio = self.__contenedor__[posicion_inicial]
         fin = self.__contenedor__[posicion_final]
         if not inicio:
             return False
-        elif not fin:
+        if not fin:
             return True
-        elif fin[0] == jugador.color:
+        if fin[0] == jugador.color:
             return True
-        elif len(fin) == 1 and fin[0] != jugador.color:
+        if len(fin) == 1 and fin[0] != jugador.color:
             return True
         return False
     def mover_checker(self,posicion_inicial, posicion_final, color ):
@@ -71,12 +77,14 @@ class Tablero:
         Argumentos:
             posicion_inicial: Posición de origen (0-23)
             posicion_final: Posición de destino (0-23)
-            color: Color de la ficha a mover ("blanco" o "negro")   
+            color: Color de la ficha a mover ("blanco" o "negro")
         Returns:
             Color de la ficha movida o None si el movimiento falló
         """
         try:
-            if not self.__contenedor__[posicion_inicial] or self.__contenedor__[posicion_inicial][-1] != color:
+            posicion_inicial_vacia = not self.__contenedor__[posicion_inicial]
+            color_diferente = self.__contenedor__[posicion_inicial][-1] != color
+            if posicion_inicial_vacia or color_diferente:
                 return None
             destino = self.__contenedor__[posicion_final]
             if destino and len(destino) == 1 and destino[0] != color:
@@ -100,9 +108,11 @@ class Tablero:
         Returns:
             Color de la ficha retirada o None si la posición está vacía
         """
-        if self.__contenedor__[posicion]:
-            return self.__contenedor__[posicion].pop()
-        return None
+        if not 0 <= posicion < 24:
+            raise PosicionInvalida(f"La posición {posicion} no existe. Debe ser entre 0 y 23")
+        if not self.__contenedor__[posicion]:
+            raise PosicionVacia(f"No hay fichas en la posición {posicion}")
+        return self.__contenedor__[posicion].pop()
     def estado_almacenamiento(self):
         """Retorna el estado de la barra de fichas capturadas."""
         return self.__almacen_ficha__
@@ -112,11 +122,11 @@ class Tablero:
         Solo funciona si el jugador tiene fichas en el almacén.
         Argumentos:
             color: Color de la ficha a reingresar
-            posicion_final: Posición de destino en el tablero 
+            posicion_final: Posición de destino en el tablero
         Returns:
             True si el reingreso fue exitoso, False en caso contrario
         """
-        if not (0 <= posicion_final < 24):
+        if not 0 <= posicion_final < 24:
             return False
         if self.__almacen_ficha__.get(color, 0) == 0:
             return False
@@ -133,21 +143,18 @@ class Tablero:
         """
         Verifica si un jugador ha ganado sacando todas sus fichas del tablero.
         Argumentos:
-            color: Color del jugador a verificar  
+            color: Color del jugador a verificar
         Returns:
             True si el jugador ha ganado, False en caso contrario
         """
         fichas_en_banco = self.__banco__.get(color, 0)
-        if fichas_en_banco == 15:
-            return True
-        else:
-            return False
+        return fichas_en_banco == 15
     def bear_off_permitido(self, color):
         """
         Verifica si un jugador puede comenzar a sacar fichas del tablero (bear off).
         Solo se permite cuando todas las fichas están en la zona de casa.
         Argumentos:
-            color: Color del jugador a verificar  
+            color: Color del jugador a verificar
         Returns:
             True si puede hacer bear off, False en caso contrario
         """
@@ -166,15 +173,16 @@ class Tablero:
         Solo se permite si el jugador tiene todas sus fichas en la zona de casa.
         Argumentos:
             posicion: Posición desde donde sacar la ficha
-            color: Color del jugador que saca la ficha   
+            color: Color del jugador que saca la ficha
         Returns:
             True si se sacó la ficha exitosamente, False en caso contrario
         """
         if not self.bear_off_permitido(color):
             return False
-        elif self.__contenedor__[posicion]:
+        if self.__contenedor__[posicion]:
             if self.__contenedor__[posicion][-1] == color:
                 self.__contenedor__[posicion].pop()
                 self.__banco__[color] += 1
                 return True
+            return False
         return False

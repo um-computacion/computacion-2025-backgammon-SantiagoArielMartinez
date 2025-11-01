@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  backgammon:
+    build: .
+    image: backgammon-game
+    container_name: backgammon-container
+    stdin_open: true # Para que funcione el input()
+    tty: true # Para que funcione el input()
+    volumes:
+      - .:/app # Monta el directorio actual en /app (para desarrollo)
