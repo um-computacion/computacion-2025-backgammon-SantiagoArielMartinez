@@ -1,5 +1,11 @@
 # Prompts de Desarrollo - Backgammon
 
+## Chat GPT - Desarrollo Inicial
+https://chatgpt.com/share/69060280-9624-800f-8432-d82c2d4fef9a
+https://chatgpt.com/share/69060320-3760-800f-ae4b-746c3a364b70
+https://chatgpt.com/share/69060371-b62c-8012-a3ef-ceac30e73d56
+https://chatgpt.com/share/690603b1-67b4-8012-bf14-28bd94b69153
+
 ## Gemini - Desarrollo Inicial
 https://gemini.google.com/share/d736f082e17b
 
