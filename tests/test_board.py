@@ -7,11 +7,9 @@ class TestTablero(unittest.TestCase):
         self.tab = Tablero()
         self.tablero = self.tab.tablero_inicial()
 
-    # Tests de inicialización
     def test_cantidad_casilleros(self):
         self.assertEqual(len(self.tablero), 24)
 
-    # Tests de configuración inicial - Fichas blancas
     def test_tablero_blanco_posicion_0(self):
         self.assertListEqual(self.tablero[0], ["blanco", "blanco"])
     
@@ -24,7 +22,6 @@ class TestTablero(unittest.TestCase):
     def test_tablero_blanco_posicion_19(self):
         self.assertListEqual(self.tablero[19], ["blanco", "blanco", "blanco"])
 
-    # Tests de configuración inicial - Fichas negras
     def test_tablero_negro_posicion_23(self):
         self.assertListEqual(self.tablero[23], ["negro", "negro", "negro", "negro", "negro"])
     
@@ -37,11 +34,9 @@ class TestTablero(unittest.TestCase):
     def test_tablero_negro_posicion_5(self):
         self.assertListEqual(self.tablero[5], ["negro", "negro", "negro", "negro", "negro"])
 
-    # Tests de estado del tablero
     def test_mostrar_tablero(self):
         self.assertEqual(self.tab.estado_tablero(), self.tab.__contenedor__)
 
-    # Tests de sacar_checker - Casos exitosos
     def test_sacar_checker_blanco_posicion_0(self):
         self.assertEqual(self.tab.sacar_checker(0), "blanco")
     
@@ -156,7 +151,6 @@ class TestTablero(unittest.TestCase):
         resultado = self.tab.bear_off(0, "blanco")
         self.assertFalse(resultado)
 
-    # Tests adicionales para cubrir líneas faltantes
     def test_mover_checker_color_incorrecto(self):
         """Test mover checker con color que no corresponde a la posición"""
         resultado = self.tab.mover_checker(0, 3, "negro")
@@ -272,6 +266,26 @@ class TestTablero(unittest.TestCase):
             self.tab.__contenedor__[i] = ["blanco"]
         resultado = self.tab.bear_off_permitido("blanco")
         self.assertTrue(resultado)
+
+    def test_mover_checker_captura_ficha_enemiga(self):
+        """Test que mover_checker captura una ficha enemiga solitaria"""
+        self.tab.__contenedor__[5] = ["blanco"]
+        self.tab.__contenedor__[8] = ["negro"]
+        resultado = self.tab.mover_checker(5, 8, "blanco")
+        self.assertIsNotNone(resultado)
+        self.assertEqual(self.tab.__almacen_ficha__["negro"], 1)
+        self.assertEqual(len(self.tab.__contenedor__[8]), 1)
+        self.assertEqual(self.tab.__contenedor__[8][0], "blanco")
+
+    def test_sacar_checker_comida_captura_ficha_enemiga(self):
+        """Test que sacar_checker_comida captura una ficha enemiga solitaria"""
+        self.tab.__almacen_ficha__["blanco"] = 1
+        self.tab.__contenedor__[2] = ["negro"]
+        resultado = self.tab.sacar_checker_comida("blanco", 2)
+        self.assertTrue(resultado)
+        self.assertEqual(self.tab.__almacen_ficha__["negro"], 1)
+        self.assertEqual(len(self.tab.__contenedor__[2]), 1)
+        self.assertEqual(self.tab.__contenedor__[2][0], "blanco")
     
 
 if __name__ == '__main__':

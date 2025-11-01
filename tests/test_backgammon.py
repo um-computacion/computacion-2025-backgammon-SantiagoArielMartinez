@@ -454,5 +454,47 @@ class TestBackgammonGame(unittest.TestCase):
         resultado = juego.mover_ficha(juego.get_jugador1(), 23, 30, 5)
         self.assertFalse(resultado)
 
+    @patch("core.dice.random.randint", side_effect=[6, 6])
+    def test_bear_off_exitoso_dado_mayor_sin_fichas_atras_blanco(self, mock_randint):
+        """Test bear off exitoso con dado mayor a la distancia y sin fichas atrás (jugador blanco)"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.__tablero__.__contenedor__ = [[] for _ in range(24)]
+        juego.__tablero__.__contenedor__[20] = ["blanco"]  # Posición 20, necesita 4 para salir
+        juego.__turno__ = juego.__jugador2__
+        juego.tirar_dados()  # Genera dados [6, 6, 6, 6]
+        resultado = juego.realizar_bear_off(juego.__jugador2__, 20, 6)  # Dado 6 > distancia 4
+        self.assertTrue(resultado)
+        self.assertEqual(len(juego.__tablero__.__contenedor__[20]), 0)
+
+    @patch("core.dice.random.randint", side_effect=[6, 6])
+    def test_bear_off_exitoso_dado_mayor_sin_fichas_atras_negro(self, mock_randint):
+        """Test bear off exitoso con dado mayor a la distancia y sin fichas atrás (jugador negro)"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.__tablero__.__contenedor__ = [[] for _ in range(24)]
+        juego.__tablero__.__contenedor__[3] = ["negro"]  # Posición 3, necesita 4 para salir
+        juego.__turno__ = juego.__jugador1__
+        juego.tirar_dados()  # Genera dados [6, 6, 6, 6]
+        resultado = juego.realizar_bear_off(juego.__jugador1__, 3, 6)  # Dado 6 > distancia 4
+        self.assertTrue(resultado)
+        self.assertEqual(len(juego.__tablero__.__contenedor__[3]), 0)
+
+    @patch("core.dice.random.randint", side_effect=[6, 3])
+    def test_bear_off_fallido_dado_no_disponible(self, mock_randint):
+        """Test bear off fallido cuando el dado no está disponible"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.__tablero__.__contenedor__ = [[] for _ in range(24)]
+        juego.__tablero__.__contenedor__[20] = ["blanco"]
+        juego.__turno__ = juego.__jugador2__
+        juego.tirar_dados()
+        resultado = juego.realizar_bear_off(juego.__jugador2__, 20, 5)  # Dado 5 no existe
+        self.assertFalse(resultado)
+
+    def test_puede_mover_sin_dados_tirados(self):
+        """Test que puede_mover retorna False sin dados tirados"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.__dados__.__valores__ = []
+        resultado = juego.puede_mover(juego.__jugador1__)
+        self.assertFalse(resultado)
+
 if __name__ == '__main__':
     unittest.main()

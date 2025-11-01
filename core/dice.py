@@ -33,7 +33,7 @@ class Dados:
             else:
                 self.__valores__ = [self.__dado1__, self.__dado2__]
             return tuple(self.__valores__)
-        except Exception: 
+        except (ValueError, TypeError):
             return ()
 
     def valores_dados(self):
