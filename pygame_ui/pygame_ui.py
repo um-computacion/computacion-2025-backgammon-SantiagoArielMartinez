@@ -1,10 +1,14 @@
-# pygame_ui/pygame_ui.py
-import pygame
+"""Interfaz gráfica del juego de Backgammon usando Pygame."""
 import sys
+import pygame
 from core.backgammongame import BackgammonGame
 
+
 class BoardRenderer:
+    """Renderiza el tablero de Backgammon en Pygame."""
+
     def __init__(self, pantalla, alto_tablero=None):
+        """Inicializa el renderizador del tablero."""
         self.pantalla = pantalla
         self.ancho = self.pantalla.get_width()
         self.alto = alto_tablero if alto_tablero else self.pantalla.get_height()
@@ -15,6 +19,7 @@ class BoardRenderer:
         self.COLOR_FONDO_GENERAL = (245, 239, 230); self.COLOR_TRI_A = (170, 120, 90); self.COLOR_TRI_B = (210, 170, 130); self.COLOR_BARRA_CENTRAL = (180, 140, 100); self.COLOR_BARRA_LATERAL = (200, 180, 150); self.COLOR_BORDE = (60, 60, 60); self.COLOR_LINEA_FICHA = (0, 0, 0); self.COLOR_FICHA_BLANCA = (245, 245, 245); self.COLOR_FICHA_NEGRA = (30, 30, 30); self.COLOR_TEXTO_GENERAL = (0, 0, 0); self.COLOR_MENSAJE_ERROR = (200, 0, 0); self.COLOR_MENSAJE_INFO = (0, 100, 0); self.COLOR_HIGHLIGHT = (100, 200, 100, 180); self.COLOR_SELECTED = (255, 200, 0, 180)
 
     def dibujar_tablero(self):
+        """Dibuja el tablero base con triángulos y barras."""
         self.pantalla.fill(self.COLOR_FONDO_GENERAL); x_barra_centro = (self.ancho / 2) - (self.ancho_barra / 2); pygame.draw.rect(self.pantalla, self.COLOR_BARRA_CENTRAL, pygame.Rect(x_barra_centro, 0, self.ancho_barra, self.alto)); pygame.draw.rect(self.pantalla, self.COLOR_BORDE, pygame.Rect(x_barra_centro, 0, self.ancho_barra, self.alto), 2)
         for i in range(6):
             x_izq = self.ancho_barra // 2 + i * self.ancho_triangulo; pygame.draw.polygon(self.pantalla, self.COLOR_TRI_A if (i % 2 == 0) else self.COLOR_TRI_B, [(x_izq, 0), (x_izq + self.ancho_triangulo, 0), (x_izq + self.ancho_triangulo // 2, self.alto_triangulo)]); pygame.draw.polygon(self.pantalla, self.COLOR_TRI_B if (i % 2 == 0) else self.COLOR_TRI_A, [(x_izq, self.alto), (x_izq + self.ancho_triangulo, self.alto), (x_izq + self.ancho_triangulo // 2, self.alto - self.alto_triangulo)])
@@ -28,6 +33,7 @@ class BoardRenderer:
         return int(x), int(y_base), int(step)
 
     def dibujar_fichas(self, estado_tablero, seleccionado=None, movimientos_validos=None):
+        """Dibuja las fichas en el tablero."""
         fuente, max_visibles = pygame.font.Font(None, 22), 5
         if seleccionado is not None and isinstance(seleccionado, int):
             self._resaltar_triangulo(seleccionado, self.COLOR_SELECTED)
@@ -45,6 +51,7 @@ class BoardRenderer:
         pts = [(x_esquina_izq, 0), (x_esquina_izq + self.ancho_triangulo, 0), (x_centro, self.alto_triangulo)] if y_base < self.alto / 2 else [(x_esquina_izq, self.alto), (x_esquina_izq + self.ancho_triangulo, self.alto), (x_centro, self.alto - self.alto_triangulo)]; surf = pygame.Surface((self.ancho, self.alto), pygame.SRCALPHA); pygame.draw.polygon(surf, color, pts); self.pantalla.blit(surf, (0, 0))
 
     def dibujar_barra(self, almacen):
+        """Dibuja la barra central con fichas capturadas."""
         x_centro = self.ancho // 2
         for color in ["blanco", "negro"]:
             cantidad = almacen.get(color, 0)
@@ -53,17 +60,25 @@ class BoardRenderer:
             for j in range(cantidad): y = y_start + j * step; ficha_color = self.COLOR_FICHA_BLANCA if color == "blanco" else self.COLOR_FICHA_NEGRA; pygame.draw.circle(self.pantalla, ficha_color, (x_centro, int(y)), self.radio_ficha); pygame.draw.circle(self.pantalla, self.COLOR_LINEA_FICHA, (x_centro, int(y)), self.radio_ficha, 2)
 
     def dibujar_barra_lateral(self, banco):
+        """Dibuja la barra lateral con fichas sacadas del tablero."""
         fuente, x_centro = pygame.font.Font(None, 36), self.ancho - self.ancho_barra // 4
         for color, y_pos in [("blanco", 40), ("negro", self.alto - 40)]:
             texto_color = self.COLOR_TEXTO_GENERAL if color == "blanco" else self.COLOR_FICHA_BLANCA; fondo_color = self.COLOR_FICHA_BLANCA if color == "blanco" else self.COLOR_FICHA_NEGRA; texto = fuente.render(f"{banco.get(color, 0)}", True, texto_color); rect = texto.get_rect(center=(x_centro, y_pos)); pygame.draw.rect(self.pantalla, fondo_color, rect.inflate(16, 10), border_radius=6); self.pantalla.blit(texto, rect)
 
     def dibujar_info_turno(self, turno, dados, mensaje):
+        """Dibuja información del turno, dados disponibles y mensajes."""
         fuente_grande, fuente_media = pygame.font.Font(None, 36), pygame.font.Font(None, 28)
         self.pantalla.blit(fuente_grande.render(f"Turno de: {turno}", True, self.COLOR_TEXTO_GENERAL), (self.ancho_barra // 2 + 10, 10))
-        if dados: self.pantalla.blit(fuente_media.render(f"Dados: {dados}", True, self.COLOR_TEXTO_GENERAL), (self.ancho_barra // 2 + 10, 50))
+        
+        # Mostrar dados disponibles
+        if dados:
+            dados_texto = f"Dados disponibles: {dados}"
+            self.pantalla.blit(fuente_media.render(dados_texto, True, (0, 100, 200)), (self.ancho_barra // 2 + 10, 50))
+        
         if mensaje: color = self.COLOR_MENSAJE_ERROR if "Error" in mensaje or "válido" in mensaje else self.COLOR_MENSAJE_INFO; texto_msg = fuente_media.render(mensaje, True, color); self.pantalla.blit(texto_msg, texto_msg.get_rect(midbottom=(self.ancho // 2, self.alto - 20)))
 
     def obtener_punto_desde_click(self, pos):
+        """Convierte coordenadas de click en número de punto del tablero."""
         x_click, y_click = pos; x_barra_start = (self.ancho / 2) - (self.ancho_barra / 2)
         if x_click > self.ancho - self.ancho_barra // 2: return 'bear_off'
         if x_click < self.ancho_barra // 2 or x_barra_start <= x_click <= x_barra_start + self.ancho_barra: return None
@@ -71,7 +86,9 @@ class BoardRenderer:
         else: punto = 19 + int((x_click - (x_barra_start + self.ancho_barra)) // self.ancho_triangulo) if x_click > x_barra_start + self.ancho_barra else 13 + int((x_click - self.ancho_barra // 2) // self.ancho_triangulo)
         return (punto - 1) if 1 <= punto <= 24 else None
 
+
 class PygameUI:
+    """Interfaz gráfica principal del juego usando Pygame."""
     def __init__(self):
         pygame.init()
         self.ANCHO_PANTALLA, self.ALTO_PANTALLA = 1200, 750
@@ -111,13 +128,13 @@ class PygameUI:
                             if self.game.get_tablero().estado_tablero()[i] and self.game.get_tablero().estado_tablero()[i][0] == jugador.color:
                                 puede_sacar = False; break
                     if puede_sacar: valid_moves.append(('bear_off', dado))
-        
+
         for dado in dados:
             pos_final = pos_inicial + dado if jugador.color == "blanco" else pos_inicial - dado
             if (0 <= pos_final < 24) and self.game.get_tablero().movimiento_valido(pos_inicial, pos_final, jugador):
                 valid_moves.append((pos_final, dado))
         return list(set(valid_moves))
-    
+
     def _finalizar_turno_ui(self):
         self.game.finalizar_turno()
         self.dados_tirados, self.origen_seleccionado, self.movimientos_validos = False, None, []
@@ -136,7 +153,7 @@ class PygameUI:
 
         if self.dados_tirados and self.rect_finalizar_turno.collidepoint(pos):
             self._finalizar_turno_ui(); return
-        
+
         punto_click = self.renderer.obtener_punto_desde_click(pos)
 
         if self.game.hay_fichas_en_almacen(jugador_actual):
@@ -167,7 +184,7 @@ class PygameUI:
                         if self.game.mover_ficha(jugador_actual, self.origen_seleccionado, destino, dado):
                             self.mensaje_ui, movimiento_exitoso = "Movimiento exitoso.", True
                     if movimiento_exitoso: break
-            
+
             if not movimiento_exitoso: self.mensaje_ui = "Movimiento no válido."
             self.mensaje_timer = 120
             self.origen_seleccionado, self.movimientos_validos = None, []
@@ -179,7 +196,22 @@ class PygameUI:
         if self.dados_tirados and not self.game.__dados__.valores_dados():
             self._finalizar_turno_ui()
 
+    def _draw(self):
+        """Dibuja toda la interfaz del juego."""
+        self.renderer.dibujar_tablero()
+        self.renderer.dibujar_fichas(self.game.get_tablero().__contenedor__, self.origen_seleccionado, self.movimientos_validos)
+        self.renderer.dibujar_barra(self.game.get_tablero().estado_almacenamiento())
+        self.renderer.dibujar_barra_lateral(getattr(self.game.get_tablero(), '__banco__', {}))
+
+        dados = self.game.__dados__.valores_dados() if self.dados_tirados else []
+        mensaje = self.mensaje_ui if self.mensaje_timer > 0 else ""
+        self.renderer.dibujar_info_turno(self.game.get_turno_actual().nombre, dados, mensaje)
+
+        self._draw_buttons()
+        pygame.display.flip()
+
     def _draw_buttons(self):
+        """Dibuja los botones de la interfaz."""
         if not self.dados_tirados:
             pygame.draw.rect(self.pantalla, self.COLOR_BOTON, self.rect_tirar_dados, border_radius=8)
             texto_surf = self.fuente_boton.render("Tirar Dados", True, self.COLOR_BOTON_TEXTO)
@@ -189,20 +221,8 @@ class PygameUI:
             texto_surf = self.fuente_boton.render("Finalizar Turno", True, self.COLOR_BOTON_TEXTO)
             self.pantalla.blit(texto_surf, texto_surf.get_rect(center=self.rect_finalizar_turno.center))
 
-    def _draw(self):
-        self.renderer.dibujar_tablero()
-        self.renderer.dibujar_fichas(self.game.get_tablero().estado_tablero(), self.origen_seleccionado, self.movimientos_validos)
-        self.renderer.dibujar_barra(self.game.get_tablero().estado_almacenamiento())
-        self.renderer.dibujar_barra_lateral(getattr(self.game.get_tablero(), '__banco__', {}))
-        
-        dados = self.game.__dados__.valores_dados() if self.dados_tirados else []
-        mensaje = self.mensaje_ui if self.mensaje_timer > 0 else ""
-        self.renderer.dibujar_info_turno(self.game.get_turno_actual().nombre, dados, mensaje)
-        
-        self._draw_buttons()
-        pygame.display.flip()
-
     def run(self):
+        """Ejecuta el loop principal del juego."""
         while self.running:
             for e in pygame.event.get():
                 if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key in (pygame.K_ESCAPE, pygame.K_q)):

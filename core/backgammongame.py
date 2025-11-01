@@ -231,3 +231,4 @@ class BackgammonGame:
             return self.__jugador2__.nombre
         return None
 
+
