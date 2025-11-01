@@ -1,4 +1,4 @@
-#!/home/santiago/computacion-2025-backgammon-SantiagoArielMartinez/venv/bin/python3
+#!/home/santiago/computacion-2025-backgammon-SantiagoArielMartinez/venv/bin/python
 import sys
 from coverage.cmdline import main
 if __name__ == '__main__':
