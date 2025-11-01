@@ -1,0 +1,13 @@
+Name                     Stmts   Miss  Cover   Missing
+------------------------------------------------------
+assets/__init__.py           0      0   100%
+cli/__init__.py              0      0   100%
+core/__init__.py             0      0   100%
+core/backgammongame.py     107     12    89%   200, 202, 207-209, 221-224, 227-229
+core/board.py               95      6    94%   96-97, 109-110, 154-155
+core/checkers.py            14      5    64%   20, 26, 34-36
+core/dice.py                27      3    89%   33-34, 61
+core/player.py              21      6    71%   32-36, 50
+pygame_ui/__init__.py        0      0   100%
+------------------------------------------------------
+TOTAL                      264     32    88%

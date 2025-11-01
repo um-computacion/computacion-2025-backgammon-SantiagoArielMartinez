@@ -1,18 +1,15 @@
 from core.player import Jugador
-
 class Tablero:
     """
     Clase que representa el tablero de Backgammon.
     Maneja las 24 posiciones del juego, el almacén de fichas capturadas,
     y todas las operaciones relacionadas con el movimiento de fichas.
     """
-    
     def __init__(self):
         """
         Inicializa un tablero vacío con 24 posiciones y el almacén de fichas.
         El tablero comienza sin fichas, deben colocarse con tablero_inicial().
         """
-        #Inicializar un tablero con 24 posiciones vacias
         self.__contenedor__ = [
             [],[],[],[],[],[],  [],[],[],[],[],[],
             [],[],[],[],[],[],  [],[],[],[],[],[], 
@@ -26,26 +23,18 @@ class Tablero:
         Returns:
             Lista con el estado inicial del tablero (24 posiciones)
         """
-        #El tablero de 24 posiciones con las fichas en su lugar de origen
         self.__contenedor__[0] = ["blanco"] * 2
-        self.__contenedor__[5] = ["negro"] * 5
-        self.__contenedor__[7] = ["negro"] * 3
         self.__contenedor__[11] = ["blanco"] * 5
-        self.__contenedor__[12] = ["negro"] * 2
-        self.__contenedor__[17] = ["blanco"] * 5
+        self.__contenedor__[17] = ["blanco"] * 5  
         self.__contenedor__[19] = ["blanco"] * 3
-        self.__contenedor__[23] = ["negro"] * 5
+        self.__contenedor__[23] = ["negro"] * 5  
+        self.__contenedor__[12] = ["negro"] * 2 
+        self.__contenedor__[7] = ["negro"] * 3
+        self.__contenedor__[5] = ["negro"] * 5
         return self.__contenedor__
-
     def estado_tablero(self):
-        """
-        Retorna el estado actual del tablero con todas las fichas en sus posiciones.
-        Returns:
-            Lista de 24 posiciones, cada una con una lista de fichas
-        """
-        #obtenes el estado del tablero actual
+        """Retorna el estado actual del tablero."""
         return self.__contenedor__
-       
     def movimiento_valido(self, posicion_inicial, posicion_final, jugador : Jugador):
         """
         Verifica si un movimiento de ficha es válido según las reglas del Backgammon.
@@ -75,7 +64,6 @@ class Tablero:
         elif len(fin) == 1 and fin[0] != jugador.color:
             return True
         return False
-
     def mover_checker(self,posicion_inicial, posicion_final, color ):
         """
         Mueve una ficha de una posición a otra en el tablero.
@@ -90,25 +78,20 @@ class Tablero:
         try:
             if not self.__contenedor__[posicion_inicial] or self.__contenedor__[posicion_inicial][-1] != color:
                 return None
-
             destino = self.__contenedor__[posicion_final]
             if destino and len(destino) == 1 and destino[0] != color:
                 enemigo_capturado = destino.pop()
                 self.agregar_a_almacen(enemigo_capturado, 1)
-
             checker_a_mover = self.__contenedor__[posicion_inicial].pop()
             self.__contenedor__[posicion_final].append(checker_a_mover)
             return checker_a_mover
-
         except (ValueError, IndexError) as e:
             print(f"Error al mover checker: {e}")
             return None
-        
     def agregar_a_almacen(self, color, cantidad):
         """Agrega una o más fichas a la barra (almacén)."""
         if color in self.__almacen_ficha__:
             self.__almacen_ficha__[color] += cantidad
-
     def sacar_checker(self, posicion):
         """
         Retira una ficha de una posición específica del tablero.
@@ -117,20 +100,12 @@ class Tablero:
         Returns:
             Color de la ficha retirada o None si la posición está vacía
         """
-        #Retira una ficha de una posicion especifica 
         if self.__contenedor__[posicion]:
             return self.__contenedor__[posicion].pop()
         return None
-
     def estado_almacenamiento(self):
-        """
-        Retorna el estado del almacén de fichas capturadas.
-        Returns:
-            Diccionario con las fichas capturadas por color
-        """
+        """Retorna el estado de la barra de fichas capturadas."""
         return self.__almacen_ficha__
-    
-
     def sacar_checker_comida(self, color, posicion_final):
         """
         Reingresa una ficha capturada desde el almacén a una posición del tablero.
@@ -145,19 +120,15 @@ class Tablero:
             return False
         if self.__almacen_ficha__.get(color, 0) == 0:
             return False
-
         destino = self.__contenedor__[posicion_final]
         if destino and destino[0] != color and len(destino) >= 2:
             return False
-        
         if destino and destino[0] != color and len(destino) == 1:
             enemigo_capturado = destino.pop()
             self.agregar_a_almacen(enemigo_capturado, 1)
-
         self.__contenedor__[posicion_final].append(color)
         self.__almacen_ficha__[color] -= 1
         return True
-        
     def verificar_ganador(self,color):
         """
         Verifica si un jugador ha ganado sacando todas sus fichas del tablero.
@@ -171,7 +142,6 @@ class Tablero:
             return True
         else:
             return False
-    
     def bear_off_permitido(self, color):
         """
         Verifica si un jugador puede comenzar a sacar fichas del tablero (bear off).
@@ -190,7 +160,6 @@ class Tablero:
                 if self.__contenedor__[i][0] == color:
                     return False
         return True
-    
     def bear_off(self, posicion, color):
         """
         Saca una ficha del tablero definitivamente (bear off).
@@ -208,3 +177,4 @@ class Tablero:
                 self.__contenedor__[posicion].pop()
                 self.__banco__[color] += 1
                 return True
+        return False

@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+core/__pycache__/
+cli/__pycache__/
+pygame_ui/__pycache__/
+tests/__pycache__/
+.coverage
+pylint_report.txt
+.git/
+.vscode/
