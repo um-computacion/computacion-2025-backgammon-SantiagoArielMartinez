@@ -28,5 +28,4 @@ Cada registro incluye: el modelo usado, el prompt original, la respuesta complet
 
 **Uso de la respuesta:** Usada sin cambios.  
 **Archivo relacionado:** `prompts-documentacion.md`
-
 ---
