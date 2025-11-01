@@ -1,27 +1,32 @@
-# Usar Python 3.12 como imagen base
-FROM python:3.12-slim
+FROM python:3.11-slim
 
-# Establecer el directorio de trabajo
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Set the working directory
 WORKDIR /app
 
-# Instalar dependencias del sistema para pygame
-RUN apt-get update && apt-get install -y \
-    libsdl2-dev \
-    libsdl2-image-dev \
-    libsdl2-mixer-dev \
-    libsdl2-ttf-dev \
-    libfreetype6-dev \
-    libportmidi-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copiar requirements.txt primero para aprovechar el cache de Docker
+# Copy requirements first for better caching
 COPY requirements.txt .
 
-# Instalar dependencias de Python
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-# Copiar todo el código del proyecto
+# Copy the rest of the application
 COPY . .
 
-# Comando por defecto: ejecutar tests con coverage
-CMD ["sh", "-c", "python3 -m coverage run -m unittest discover tests && python3 -m coverage report -m"]
+# Make entrypoint executable
+RUN chmod +x entrypoint.sh
+
+# Create non-privileged user
+RUN useradd -m -u 10001 appuser && \
+    chown -R appuser:appuser /app
+
+USER appuser
+# No exposed ports need (CLI only, Pygame runs locally)
+
+# Use entrypoint script
+ENTRYPOINT ["./entrypoint.sh"]
