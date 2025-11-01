@@ -261,20 +261,22 @@ class TestBackgammonGame(unittest.TestCase):
     @patch("core.dice.random.randint", side_effect=[3, 5])
     def test_mover_ficha_jugador_sin_turno(self, mock_randint):
         """Test mover ficha cuando no es el turno del jugador"""
+        from core.exceptions import NoEsTuTurno
         juego = BackgammonGame("Santiago", "Vanina")
         juego.get_tablero().tablero_inicial()
         juego.tirar_dados()
-        resultado = juego.mover_ficha(juego.get_jugador2(), 0, 3, 3)
-        self.assertFalse(resultado)
+        with self.assertRaises(NoEsTuTurno):
+            juego.mover_ficha(juego.get_jugador2(), 0, 3, 3)
 
     @patch("core.dice.random.randint", side_effect=[4, 2])
     def test_mover_ficha_dado_no_disponible(self, mock_randint):
         """Test mover ficha con un valor de dado que no está disponible"""
+        from core.exceptions import SinDados
         juego = BackgammonGame("Santiago", "Vanina")
         juego.get_tablero().tablero_inicial()
         juego.tirar_dados()
-        resultado = juego.mover_ficha(juego.get_jugador1(), 23, 18, 6)
-        self.assertFalse(resultado)
+        with self.assertRaises(SinDados):
+            juego.mover_ficha(juego.get_jugador1(), 23, 18, 6)
 
     @patch("core.dice.random.randint", side_effect=[5, 3])
     def test_mover_ficha_movimiento_invalido(self, mock_randint):
@@ -374,5 +376,83 @@ class TestBackgammonGame(unittest.TestCase):
         juego.__dados__.__valores__ = [3]
         resultado = juego.realizar_bear_off(juego.__jugador2__, 20, 3)
         self.assertFalse(resultado)
+
+    @patch("core.dice.random.randint", side_effect=[6, 6])
+    def test_mover_ficha_con_dados_dobles(self, mock_randint):
+        """Test mover ficha cuando hay dados dobles"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.get_tablero().tablero_inicial()
+        juego.tirar_dados()
+        self.assertEqual(len(juego.__dados__.valores_dados()), 4)
+
+    @patch("core.dice.random.randint", side_effect=[5, 3])
+    def test_mover_ficha_jugador_incorrecto(self, mock_randint):
+        """Test que no permite mover si no es el turno del jugador"""
+        from core.exceptions import NoEsTuTurno
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.get_tablero().tablero_inicial()
+        juego.tirar_dados()
+        with self.assertRaises(NoEsTuTurno):
+            juego.mover_ficha(juego.get_jugador2(), 0, 5, 5)
+
+    @patch("core.dice.random.randint", side_effect=[5, 3])
+    def test_reingresar_ficha_jugador_sin_turno(self, mock_randint):
+        """Test reingresar ficha sin turno"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.tirar_dados()
+        juego.cambiar_turno()
+        resultado = juego.reingresar_ficha(juego.get_jugador1(), 3)
+        self.assertFalse(resultado)
+
+    @patch("core.dice.random.randint", side_effect=[5, 3])
+    def test_reingresar_ficha_sin_fichas_en_almacen(self, mock_randint):
+        """Test reingresar ficha sin fichas en almacén"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.tirar_dados()
+        resultado = juego.reingresar_ficha(juego.get_jugador1(), 3)
+        self.assertFalse(resultado)
+
+    @patch("core.dice.random.randint", side_effect=[5, 3])
+    def test_reingresar_ficha_dado_no_disponible(self, mock_randint):
+        """Test reingresar ficha con dado no disponible"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.get_tablero().__almacen_ficha__["negro"] = 1
+        juego.tirar_dados()
+        resultado = juego.reingresar_ficha(juego.get_jugador1(), 6)
+        self.assertFalse(resultado)
+
+    def test_verificar_ganador_jugador2_gana(self):
+        """Test verificar ganador cuando gana jugador 2"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.get_tablero().__contenedor__ = [[] for _ in range(24)]
+        juego.get_tablero().__almacen_ficha__["blanco"] = 0
+        juego.get_tablero().__banco__["blanco"] = 15
+        ganador = juego.verificar_ganador()
+        self.assertEqual(ganador, "Vanina")
+
+    @patch("core.dice.random.randint", side_effect=[3, 3])
+    def test_dados_dobles_genera_cuatro_valores(self, mock_randint):
+        """Test que dados dobles generan 4 valores"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.tirar_dados()
+        self.assertEqual(len(juego.__dados__.valores_dados()), 4)
+
+    def test_cambiar_turno_multiples_veces(self):
+        """Test cambiar turno múltiples veces"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        jugador_inicial = juego.get_turno_actual()
+        juego.cambiar_turno()
+        juego.cambiar_turno()
+        self.assertEqual(juego.get_turno_actual(), jugador_inicial)
+
+    @patch("core.dice.random.randint", side_effect=[5, 3])
+    def test_mover_ficha_posicion_invalida(self, mock_randint):
+        """Test mover ficha a posición inválida"""
+        juego = BackgammonGame("Santiago", "Vanina")
+        juego.get_tablero().tablero_inicial()
+        juego.tirar_dados()
+        resultado = juego.mover_ficha(juego.get_jugador1(), 23, 30, 5)
+        self.assertFalse(resultado)
+
 if __name__ == '__main__':
     unittest.main()

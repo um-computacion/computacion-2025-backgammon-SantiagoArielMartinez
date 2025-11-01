@@ -8,6 +8,79 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### Por Agregar
+- Mejoras en interfaz Pygame
+- Integración CI/CD
+- Documentación adicional
+
+---
+
+## [1.0.0] - 2025-10-31
+
+### Added
+- **Docker**: Containerización completa del proyecto (PR #85, commit 0ff7396)
+  - Dockerfile con Python 3.12-slim y SDL2 para Pygame
+  - docker-compose.yml para orquestación de servicios
+  - Script helper `docker-run.sh` con menú interactivo
+  - Documentación completa: README-DOCKER.md y DOCKER-QUICK-START.md
+  - Archivo .dockerignore para optimizar builds
+- **Documentación Completa**:
+  - CHANGELOG.md actualizado con historial completo
+  - README.md con secciones de Docker y ejecución
+  - requirements.txt limpio con solo dependencias esenciales
+
+### Changed
+- Simplificación de requirements.txt (3 paquetes: coverage, pylint, pygame)
+- Mejora de estructura de documentación
+- Actualización de instrucciones de instalación y ejecución
+
+---
+
+## [0.9.0] - 2025-10-25
+
+### Added
+- **Interfaz Pygame**: Interfaz gráfica completa (PR #83, commit dd7f0cd)
+  - Renderizado visual del tablero con gráficos
+  - Sistema de click handling para movimientos con mouse
+  - Visualización de dados y turnos en pantalla
+  - Indicadores visuales para jugador actual
+  - Ejecutable con `python -m pygame_ui.pygame_ui`
+
+### Changed
+- Separación completa entre CLI y Pygame en módulos independientes
+- Actualización de README con instrucciones de interfaz gráfica
+
+---
+
+## [0.8.0] - 2025-10-20
+
+### Added
+- **Interfaz CLI Completa**: Sistema de línea de comandos funcional (PRs #73-79)
+  - Visualización ASCII del tablero completo (24 posiciones) (commit 0b837f5)
+  - Menú interactivo de turnos y acciones (commit 0cbe774)
+  - Sistema de input validado con manejo de errores (commit 4fcb034)
+  - Confirmación de acciones del usuario (commit b0de2fd)
+  - Mensajes claros y ayuda contextual
+
+### Fixed
+- Corrección de tests relacionados con CLI (PR #81, commit 4e0f44f)
+- Mejora en validación de movimientos en interfaz
+
+---
+
+## [0.7.0] - 2025-10-15
+
+### Added
+- Método `win` para detectar victoria en BackgammonGame (PR #71, commit e4911d4)
+- Método `verificar_turno_finalizado` para validar fin de turno (commit e4911d4)
+- Método para gestionar fichas en almacén (PR #69, commit 3f50df7)
+- Método `reingresar_ficha` en BackgammonGame (PR #67, commit b95f808)
+
+### Changed
+- Lógica de victoria completamente implementada
+- Sistema de turnos más robusto
+- Mejora en gestión de fichas capturadas
+
 ---
 
 ## [0.3.0] - 2025-10-09
@@ -227,7 +300,11 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
-[Unreleased]: https://github.com/um-computacion/computacion-2025-backgammon-SantiagoArielMartinez/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/um-computacion/computacion-2025-backgammon-SantiagoArielMartinez/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/um-computacion/computacion-2025-backgammon-SantiagoArielMartinez/compare/v0.9.0...v1.0.0
+[0.9.0]: https://github.com/um-computacion/computacion-2025-backgammon-SantiagoArielMartinez/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/um-computacion/computacion-2025-backgammon-SantiagoArielMartinez/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/um-computacion/computacion-2025-backgammon-SantiagoArielMartinez/compare/v0.3.0...v0.7.0
 [0.3.0]: https://github.com/um-computacion/computacion-2025-backgammon-SantiagoArielMartinez/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/um-computacion/computacion-2025-backgammon-SantiagoArielMartinez/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/um-computacion/computacion-2025-backgammon-SantiagoArielMartinez/compare/v0.0.9...v0.1.0

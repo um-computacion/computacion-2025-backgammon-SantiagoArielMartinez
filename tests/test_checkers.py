@@ -37,5 +37,37 @@ class TestFicha(unittest.TestCase):
         ficha = Ficha("negro" , 6)
         self.assertEqual(ficha.__str__(), "negro en 6")
 
+    def test_get_ficha_blanca(self):
+        ficha = Ficha("blanco", 5)
+        self.assertEqual(ficha.get_ficha(), "blanco")
+
+    def test_get_ficha_negra(self):
+        ficha = Ficha("negro", 10)
+        self.assertEqual(ficha.get_ficha(), "negro")
+
+    def test_get_movimiento_posicion_inicial(self):
+        ficha = Ficha("blanco", 0)
+        self.assertEqual(ficha.get_movimiento(), 0)
+
+    def test_get_movimiento_posicion_media(self):
+        ficha = Ficha("negro", 12)
+        self.assertEqual(ficha.get_movimiento(), 12)
+
+    def test_get_movimiento_posicion_final(self):
+        ficha = Ficha("blanco", 23)
+        self.assertEqual(ficha.get_movimiento(), 23)
+
+    def test_adentro_almacen_true(self):
+        ficha = Ficha("blanco", -1)
+        self.assertTrue(ficha.adentro_almacen())
+
+    def test_adentro_almacen_false_posicion_cero(self):
+        ficha = Ficha("negro", 0)
+        self.assertFalse(ficha.adentro_almacen())
+
+    def test_adentro_almacen_false_posicion_normal(self):
+        ficha = Ficha("blanco", 10)
+        self.assertFalse(ficha.adentro_almacen())
+
 if __name__ == '__main__':
     unittest.main()

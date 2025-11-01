@@ -1,3 +1,8 @@
+"""
+Módulo que define la clase Jugador para el juego de Backgammon.
+"""
+
+
 class Jugador:
     """
     Clase que representa a un jugador en el juego de Backgammon.
@@ -13,10 +18,12 @@ class Jugador:
         self.__nombre__ = nombre
         self.__color__ = color
         self.__capturado__ = []
+
     @property
     def nombre(self) -> str:
         """Devuelve el nombre del jugador."""
         return self.__nombre__
+
     @nombre.setter
     def jugador(self, nombre: str) -> None:
         """
@@ -26,15 +33,17 @@ class Jugador:
         Levanta:
             ValueError: Si el nombre no es un string o está vacío.
         """
-        if not isinstance(nombre,str):
+        if not isinstance(nombre, str):
             raise ValueError("El nombre debe ser un string no vacio")
         if nombre.strip() == "":
             raise ValueError("El nombre no puede estar vacio")
         self.__nombre__ = nombre
+
     @property
     def color(self) -> str:
         """Devuelve el color de las fichas del jugador."""
         return self.__color__
+
     @color.setter
     def color(self, color: str) -> None:
         """

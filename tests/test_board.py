@@ -49,8 +49,9 @@ class TestTablero(unittest.TestCase):
         self.assertEqual(self.tab.sacar_checker(5), "negro")
     
     def test_sacar_checker_posicion_vacia(self):
-        resultado = self.tab.sacar_checker(1)
-        self.assertIsNone(resultado)
+        from core.exceptions import PosicionVacia
+        with self.assertRaises(PosicionVacia):
+            self.tab.sacar_checker(1)
 
     def test_mover_checker_blanco(self):
         self.assertEqual(self.tab.mover_checker(0, 3, "blanco"), "blanco")
@@ -237,6 +238,40 @@ class TestTablero(unittest.TestCase):
         self.tab.tablero_inicial()
         resultado = self.tab.mover_checker(0, 25, "blanco")
         self.assertIsNone(resultado)
+
+    def test_agregar_a_almacen_blanco(self):
+        """Test agregar fichas blancas al almacén"""
+        self.tab.agregar_a_almacen("blanco", 2)
+        self.assertEqual(self.tab.__almacen_ficha__["blanco"], 2)
+
+    def test_agregar_a_almacen_negro_multiple(self):
+        """Test agregar múltiples fichas negras al almacén"""
+        self.tab.agregar_a_almacen("negro", 1)
+        self.tab.agregar_a_almacen("negro", 3)
+        self.assertEqual(self.tab.__almacen_ficha__["negro"], 4)
+
+    def test_sacar_checker_comida_con_dos_fichas_enemigas(self):
+        """Test que no permite sacar si hay 2+ fichas enemigas"""
+        self.tab.__almacen_ficha__["blanco"] = 1
+        self.tab.__contenedor__[2] = ["negro", "negro"]
+        resultado = self.tab.sacar_checker_comida("blanco", 2)
+        self.assertFalse(resultado)
+
+    def test_sacar_checker_comida_reduce_almacen(self):
+        """Test que sacar checker reduce el almacén"""
+        self.tab.__almacen_ficha__["negro"] = 3
+        self.tab.__contenedor__[5] = []
+        resultado = self.tab.sacar_checker_comida("negro", 5)
+        self.assertTrue(resultado)
+        self.assertEqual(self.tab.__almacen_ficha__["negro"], 2)
+
+    def test_bear_off_permitido_blanco_todas_en_casa(self):
+        """Test bear off permitido cuando todas las fichas blancas están en casa"""
+        self.tab.__contenedor__ = [[] for _ in range(24)]
+        for i in range(18, 24):
+            self.tab.__contenedor__[i] = ["blanco"]
+        resultado = self.tab.bear_off_permitido("blanco")
+        self.assertTrue(resultado)
     
 
 if __name__ == '__main__':
