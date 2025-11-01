@@ -5,11 +5,9 @@ Controla el flujo del juego, turnos y movimientos.
 from core.player import Jugador
 from core.board import Tablero
 from core.dice import Dados
-
 class BackgammonGame:
     """
     Clase principal que controla el flujo del juego de Backgammon.
-    Maneja los turnos, el estado del juego, los movimientos de fichas y la detección de ganadores.
     """
     def __init__(self, nombre_jugador1, nombre_jugador2):
         """
@@ -23,8 +21,7 @@ class BackgammonGame:
         self.__tablero__ = Tablero()
         self.__dados__ = Dados()
         self.__turno__ = self.__jugador1__
-        self.__tablero__.tablero_inicial()
-        
+        self.__tablero__.tablero_inicial()        
     def get_jugador1(self):
         """
         Retorna el primer jugador del juego.
@@ -32,7 +29,6 @@ class BackgammonGame:
             Objeto Jugador con fichas negras
         """
         return self.__jugador1__
-    
     def get_jugador2(self):
         """
         Retorna el segundo jugador del juego.
@@ -40,7 +36,6 @@ class BackgammonGame:
             Objeto Jugador con fichas blancas
         """
         return self.__jugador2__
-    
     def get_tablero(self):
         """
         Retorna el tablero actual del juego.
@@ -48,7 +43,6 @@ class BackgammonGame:
             Objeto Tablero con el estado actual de las fichas
         """
         return self.__tablero__
-    
     def get_turno_actual(self):
         """
         Retorna el jugador que tiene el turno actual.
@@ -56,7 +50,6 @@ class BackgammonGame:
             Objeto Jugador al que le corresponde jugar
         """
         return self.__turno__
-    
     def tirar_dados(self):
         """
         Tira los dados para iniciar un nuevo turno.
@@ -66,7 +59,13 @@ class BackgammonGame:
         """
         self.__dados__.tirar_dado()
         return self.__dados__
-    
+    def finalizar_turno(self):
+        """
+        Finaliza el turno actual del jugador.
+        Resetea los dados disponibles y cambia el turno al otro jugador.
+        """
+        self.__dados__.resetear_dados()
+        self.cambiar_turno()
     def obtener_turno(self):
         """
         Retorna un mensaje de texto indicando de quién es el turno actual.
@@ -75,8 +74,7 @@ class BackgammonGame:
         """
         if self.__turno__ == self.__jugador1__:
             return f"Es el turno de {self.__jugador1__.nombre}"
-        return f"Es el turno de {self.__jugador2__.nombre}"
-        
+        return f"Es el turno de {self.__jugador2__.nombre}"   
     def cambiar_turno(self):
         """
         Cambia el turno del jugador actual al otro jugador.
@@ -86,7 +84,6 @@ class BackgammonGame:
             self.__turno__ = self.__jugador2__
         else:
             self.__turno__ = self.__jugador1__
-    
     def puede_mover(self, jugador: Jugador):
         """
         Verifica si un jugador puede realizar movimientos en este momento.
@@ -104,7 +101,6 @@ class BackgammonGame:
         except AttributeError:
             return False
         return True
-    
     def mover_ficha(self, jugador: Jugador, posicion_inicial, posicion_final, valor_dado):
         """
         Mueve una ficha del jugador de una posición a otra usando un valor de dado específico.
@@ -121,15 +117,11 @@ class BackgammonGame:
             return False
         if valor_dado not in self.__dados__.valores_dados():
             return False
-
-        # El tablero ahora se encarga de todo. Primero valida...
         if self.__tablero__.movimiento_valido(posicion_inicial, posicion_final, jugador):
-            # ... y luego mueve (y captura si es necesario)
             if self.__tablero__.mover_checker(posicion_inicial, posicion_final, jugador.color):
                 self.__dados__.usar_valor(valor_dado)
                 return True
         return False
-
     def usar_dados(self, valor):
         """
         Marca un valor de dado como usado, eliminándolo de los dados disponibles.
@@ -142,7 +134,6 @@ class BackgammonGame:
             self.__dados__.usar_valor(valor)
             return True
         return False
-    
     def estado_juego(self):
         """
         Retorna el estado completo del juego actual.
@@ -160,7 +151,6 @@ class BackgammonGame:
             "dados" : dados_actuales,
             "almacen_fichas" : self.__tablero__.__almacen_ficha__
         }    
-    
     def hay_fichas_en_almacen(self, jugador: Jugador):
         """
         Verifica si el jugador tiene fichas capturadas en el almacén (barra).
@@ -170,7 +160,6 @@ class BackgammonGame:
             True si tiene fichas en el almacén, False en caso contrario
         """
         return self.__tablero__.__almacen_ficha__[jugador.color] > 0
-
     def reingresar_ficha(self, jugador: Jugador, valor_dado):
         """
         Reingresa una ficha capturada desde el almacén al tablero usando un valor de dado.
@@ -193,43 +182,34 @@ class BackgammonGame:
             self.__dados__.usar_valor(valor_dado)
             return True
         return False
-    
     def realizar_bear_off(self, jugador: Jugador, posicion, valor_dado):
         """Intenta sacar una ficha del tablero (bear off)."""
         if not self.puede_mover(jugador) or not self.__tablero__.bear_off_permitido(jugador.color):
             return False
         if valor_dado not in self.__dados__.valores_dados():
             return False
-
         distancia_para_salir = (24 - posicion) if jugador.color == "blanco" else (posicion + 1)
-
         if valor_dado == distancia_para_salir:
             if self.__tablero__.bear_off(posicion, jugador.color):
                 self.__dados__.usar_valor(valor_dado)
                 return True
-
         elif valor_dado > distancia_para_salir:
             hay_fichas_mas_atras = False
             if jugador.color == "blanco":
-                # Para las blancas, "más atrás" significa un índice menor (puntos 19, 20, etc.)
                 for i in range(18, posicion):
                     if self.__tablero__.estado_tablero()[i] and self.__tablero__.estado_tablero()[i][0] == jugador.color:
                         hay_fichas_mas_atras = True
                         break
-            else: # Para las negras
-                # Para las negras, "más atrás" significa un índice mayor (puntos 6, 5, etc.)
+            else: 
                 for i in range(posicion + 1, 6):
                     if self.__tablero__.estado_tablero()[i] and self.__tablero__.estado_tablero()[i][0] == jugador.color:
                         hay_fichas_mas_atras = True
-                        break
-            
+                        break  
             if not hay_fichas_mas_atras:
                 if self.__tablero__.bear_off(posicion, jugador.color):
                     self.__dados__.usar_valor(valor_dado)
                     return True
-
         return False
-    
     def verificar_ganador(self):
         """
         Verifica si algún jugador ha ganado la partida.
@@ -242,11 +222,3 @@ class BackgammonGame:
         if self.__tablero__.verificar_ganador(self.__jugador2__.color):
             return self.__jugador2__.nombre
         return None
-  
-    def finalizar_turno(self):
-        """
-        Finaliza el turno actual del jugador.
-        Resetea los dados disponibles y cambia el turno al otro jugador.
-        """
-        self.__dados__.resetear_dados()
-        self.cambiar_turno()
